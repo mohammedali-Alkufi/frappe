@@ -1,0 +1,396 @@
+2026-09-28 13:55:44,557 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'User', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-28 13:55:45,937 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'User', 'name': 'clerk@passport.local', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-28 13:55:49,553 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'User', 'name': 'clerk@passport.local', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-28 13:57:18,420 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'User Permission', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-28 16:04:16,985 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"name":"clerk@passport.local","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:57:05.156626","modified_by":"Administrator","docstatus":0,"idx":0,"enabled":1,"email":"clerk@passport.local","first_name":"clerk","full_name":"clerk","username":"clerk","language":"en","time_zone":"Asia/Baghdad","send_welcome_email":1,"unsubscribed":0,"mute_sounds":0,"desk_theme":"Light","code_editor_type":"vscode","search_bar":1,"notifications":1,"list_sidebar":1,"bulk_actions":1,"view_switcher":1,"form_sidebar":1,"form_navigation_buttons":1,"timeline":1,"dashboard":1,"show_absolute_datetime_in_timeline":0,"new_password":"admin","logout_all_sessions":1,"reset_password_key":"350ce051d36a2534debd69654fa1e7386f20cd7c3cfbc00011e1879b1ef34d64","last_reset_password_key_generated_on":"2026-09-28 13:57:05.156614","document_follow_notify":0,"document_follow_frequency":"Daily","follow_created_documents":0,"follow_commented_documents":0,"follow_liked_documents":0,"follow_assigned_documents":0,"follow_shared_documents":0,"thread_notify":1,"send_me_a_copy":0,"allowed_in_mentions":1,"simultaneous_sessions":2,"last_ip":"","login_after":0,"user_type":"System User","login_before":0,"bypass_restrict_ip_check_if_2fa_enabled":0,"last_login":"","onboarding_status":"{}","doctype":"User","role_profiles":[],"roles":[{"name":"c5gr12kea8","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"role":"Passport Data Entry Clerk","parent":"clerk@passport.local","parentfield":"roles","parenttype":"User","doctype":"Has Role"}],"block_modules":[],"user_emails":[{"name":"gkfknslrun","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"email_account":"Clerk","email_id":"clerk@passport.local","awaiting_password":1,"used_oauth":0,"enable_outgoing":0,"parent":"clerk@passport.local","parentfield":"user_emails","parenttype":"User","doctype":"User Email"}],"defaults":[],"social_logins":[{"name":"bqjqulpm91","owner":"Administrator","creation":"2026-09-28 13:43:07.572576","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"provider":"frappe","userid":"f0233a72c50c90cb9ecd30face3e95c51d07687","parent":"clerk@passport.local","parentfield":"social_logins","parenttype":"User","doctype":"User Social Login"}],"active_sessions":[],"__onload":{"all_modules":["Automation","Contacts","Core","Custom","Desk","Email","Geo","Integrations","Printing","Website","Workflow","passport_system"]},"__last_sync_on":"2026-09-28T13:03:37.323Z","__unsaved":1}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-28 16:04:27,869 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"name":"clerk@passport.local","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:57:05.156626","modified_by":"Administrator","docstatus":0,"idx":0,"enabled":1,"email":"clerk@passport.local","first_name":"clerk","full_name":"clerk","username":"clerk","language":"en","time_zone":"Asia/Baghdad","send_welcome_email":1,"unsubscribed":0,"mute_sounds":0,"desk_theme":"Light","code_editor_type":"vscode","search_bar":1,"notifications":1,"list_sidebar":1,"bulk_actions":1,"view_switcher":1,"form_sidebar":1,"form_navigation_buttons":1,"timeline":1,"dashboard":1,"show_absolute_datetime_in_timeline":0,"new_password":"admin1234","logout_all_sessions":1,"reset_password_key":"350ce051d36a2534debd69654fa1e7386f20cd7c3cfbc00011e1879b1ef34d64","last_reset_password_key_generated_on":"2026-09-28 13:57:05.156614","document_follow_notify":0,"document_follow_frequency":"Daily","follow_created_documents":0,"follow_commented_documents":0,"follow_liked_documents":0,"follow_assigned_documents":0,"follow_shared_documents":0,"thread_notify":1,"send_me_a_copy":0,"allowed_in_mentions":1,"simultaneous_sessions":2,"last_ip":"","login_after":0,"user_type":"System User","login_before":0,"bypass_restrict_ip_check_if_2fa_enabled":0,"last_login":"","onboarding_status":"{}","doctype":"User","role_profiles":[],"roles":[{"name":"c5gr12kea8","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"role":"Passport Data Entry Clerk","parent":"clerk@passport.local","parentfield":"roles","parenttype":"User","doctype":"Has Role"}],"block_modules":[],"user_emails":[{"name":"gkfknslrun","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"email_account":"Clerk","email_id":"clerk@passport.local","awaiting_password":1,"used_oauth":0,"enable_outgoing":0,"parent":"clerk@passport.local","parentfield":"user_emails","parenttype":"User","doctype":"User Email"}],"defaults":[],"social_logins":[{"name":"bqjqulpm91","owner":"Administrator","creation":"2026-09-28 13:43:07.572576","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"provider":"frappe","userid":"f0233a72c50c90cb9ecd30face3e95c51d07687","parent":"clerk@passport.local","parentfield":"social_logins","parenttype":"User","doctype":"User Social Login"}],"active_sessions":[],"__onload":{"all_modules":["Automation","Contacts","Core","Custom","Desk","Email","Geo","Integrations","Printing","Website","Workflow","passport_system"]},"__last_sync_on":"2026-09-28T13:03:37.323Z","__unsaved":1}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-28 16:04:45,309 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"name":"clerk@passport.local","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:57:05.156626","modified_by":"Administrator","docstatus":0,"idx":0,"enabled":1,"email":"clerk@passport.local","first_name":"clerk","full_name":"clerk","username":"clerk","language":"en","time_zone":"Asia/Baghdad","send_welcome_email":1,"unsubscribed":0,"mute_sounds":0,"desk_theme":"Light","code_editor_type":"vscode","search_bar":1,"notifications":1,"list_sidebar":1,"bulk_actions":1,"view_switcher":1,"form_sidebar":1,"form_navigation_buttons":1,"timeline":1,"dashboard":1,"show_absolute_datetime_in_timeline":0,"new_password":"clerk1234","logout_all_sessions":1,"reset_password_key":"350ce051d36a2534debd69654fa1e7386f20cd7c3cfbc00011e1879b1ef34d64","last_reset_password_key_generated_on":"2026-09-28 13:57:05.156614","document_follow_notify":0,"document_follow_frequency":"Daily","follow_created_documents":0,"follow_commented_documents":0,"follow_liked_documents":0,"follow_assigned_documents":0,"follow_shared_documents":0,"thread_notify":1,"send_me_a_copy":0,"allowed_in_mentions":1,"simultaneous_sessions":2,"last_ip":"","login_after":0,"user_type":"System User","login_before":0,"bypass_restrict_ip_check_if_2fa_enabled":0,"last_login":"","onboarding_status":"{}","doctype":"User","role_profiles":[],"roles":[{"name":"c5gr12kea8","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"role":"Passport Data Entry Clerk","parent":"clerk@passport.local","parentfield":"roles","parenttype":"User","doctype":"Has Role"}],"block_modules":[],"user_emails":[{"name":"gkfknslrun","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"email_account":"Clerk","email_id":"clerk@passport.local","awaiting_password":1,"used_oauth":0,"enable_outgoing":0,"parent":"clerk@passport.local","parentfield":"user_emails","parenttype":"User","doctype":"User Email"}],"defaults":[],"social_logins":[{"name":"bqjqulpm91","owner":"Administrator","creation":"2026-09-28 13:43:07.572576","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"provider":"frappe","userid":"f0233a72c50c90cb9ecd30face3e95c51d07687","parent":"clerk@passport.local","parentfield":"social_logins","parenttype":"User","doctype":"User Social Login"}],"active_sessions":[],"__onload":{"all_modules":["Automation","Contacts","Core","Custom","Desk","Email","Geo","Integrations","Printing","Website","Workflow","passport_system"]},"__last_sync_on":"2026-09-28T13:03:37.323Z","__unsaved":1}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-28 16:04:54,122 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"name":"clerk@passport.local","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:57:05.156626","modified_by":"Administrator","docstatus":0,"idx":0,"enabled":1,"email":"clerk@passport.local","first_name":"clerk","full_name":"clerk","username":"clerk","language":"en","time_zone":"Asia/Baghdad","send_welcome_email":1,"unsubscribed":0,"mute_sounds":0,"desk_theme":"Light","code_editor_type":"vscode","search_bar":1,"notifications":1,"list_sidebar":1,"bulk_actions":1,"view_switcher":1,"form_sidebar":1,"form_navigation_buttons":1,"timeline":1,"dashboard":1,"show_absolute_datetime_in_timeline":0,"new_password":"Clerk1234","logout_all_sessions":1,"reset_password_key":"350ce051d36a2534debd69654fa1e7386f20cd7c3cfbc00011e1879b1ef34d64","last_reset_password_key_generated_on":"2026-09-28 13:57:05.156614","document_follow_notify":0,"document_follow_frequency":"Daily","follow_created_documents":0,"follow_commented_documents":0,"follow_liked_documents":0,"follow_assigned_documents":0,"follow_shared_documents":0,"thread_notify":1,"send_me_a_copy":0,"allowed_in_mentions":1,"simultaneous_sessions":2,"last_ip":"","login_after":0,"user_type":"System User","login_before":0,"bypass_restrict_ip_check_if_2fa_enabled":0,"last_login":"","onboarding_status":"{}","doctype":"User","role_profiles":[],"roles":[{"name":"c5gr12kea8","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"role":"Passport Data Entry Clerk","parent":"clerk@passport.local","parentfield":"roles","parenttype":"User","doctype":"Has Role"}],"block_modules":[],"user_emails":[{"name":"gkfknslrun","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"email_account":"Clerk","email_id":"clerk@passport.local","awaiting_password":1,"used_oauth":0,"enable_outgoing":0,"parent":"clerk@passport.local","parentfield":"user_emails","parenttype":"User","doctype":"User Email"}],"defaults":[],"social_logins":[{"name":"bqjqulpm91","owner":"Administrator","creation":"2026-09-28 13:43:07.572576","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"provider":"frappe","userid":"f0233a72c50c90cb9ecd30face3e95c51d07687","parent":"clerk@passport.local","parentfield":"social_logins","parenttype":"User","doctype":"User Social Login"}],"active_sessions":[],"__onload":{"all_modules":["Automation","Contacts","Core","Custom","Desk","Email","Geo","Integrations","Printing","Website","Workflow","passport_system"]},"__last_sync_on":"2026-09-28T13:03:37.323Z","__unsaved":1}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-28 16:05:20,098 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"name":"clerk@passport.local","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:57:05.156626","modified_by":"Administrator","docstatus":0,"idx":0,"enabled":1,"email":"clerk@passport.local","first_name":"clerk","full_name":"clerk","username":"clerk","language":"en","time_zone":"Asia/Baghdad","send_welcome_email":1,"unsubscribed":0,"mute_sounds":0,"desk_theme":"Light","code_editor_type":"vscode","search_bar":1,"notifications":1,"list_sidebar":1,"bulk_actions":1,"view_switcher":1,"form_sidebar":1,"form_navigation_buttons":1,"timeline":1,"dashboard":1,"show_absolute_datetime_in_timeline":0,"new_password":"Clerk1a","logout_all_sessions":1,"reset_password_key":"350ce051d36a2534debd69654fa1e7386f20cd7c3cfbc00011e1879b1ef34d64","last_reset_password_key_generated_on":"2026-09-28 13:57:05.156614","document_follow_notify":0,"document_follow_frequency":"Daily","follow_created_documents":0,"follow_commented_documents":0,"follow_liked_documents":0,"follow_assigned_documents":0,"follow_shared_documents":0,"thread_notify":1,"send_me_a_copy":0,"allowed_in_mentions":1,"simultaneous_sessions":2,"last_ip":"","login_after":0,"user_type":"System User","login_before":0,"bypass_restrict_ip_check_if_2fa_enabled":0,"last_login":"","onboarding_status":"{}","doctype":"User","role_profiles":[],"roles":[{"name":"c5gr12kea8","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"role":"Passport Data Entry Clerk","parent":"clerk@passport.local","parentfield":"roles","parenttype":"User","doctype":"Has Role"}],"block_modules":[],"user_emails":[{"name":"gkfknslrun","owner":"Administrator","creation":"2026-09-28 13:43:07.508964","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"email_account":"Clerk","email_id":"clerk@passport.local","awaiting_password":1,"used_oauth":0,"enable_outgoing":0,"parent":"clerk@passport.local","parentfield":"user_emails","parenttype":"User","doctype":"User Email"}],"defaults":[],"social_logins":[{"name":"bqjqulpm91","owner":"Administrator","creation":"2026-09-28 13:43:07.572576","modified":"2026-09-28 13:51:19.900697","modified_by":"Administrator","docstatus":0,"idx":1,"provider":"frappe","userid":"f0233a72c50c90cb9ecd30face3e95c51d07687","parent":"clerk@passport.local","parentfield":"social_logins","parenttype":"User","doctype":"User Social Login"}],"active_sessions":[],"__onload":{"all_modules":["Automation","Contacts","Core","Custom","Desk","Email","Geo","Integrations","Printing","Website","Workflow","passport_system"]},"__last_sync_on":"2026-09-28T13:03:37.323Z","__unsaved":1}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-28 16:15:00,152 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 16:15:46,513 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 16:28:26,766 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 16:28:46,163 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 16:33:17,492 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'permission-manager', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-28 16:33:27,710 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 16:34:05,383 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 16:34:59,037 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'doctype', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-28 16:36:35,771 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 16:43:51,252 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"docstatus":0,"doctype":"Role","name":"new-role-fkeagpaenh","__islocal":1,"__unsaved":1,"owner":"Administrator","disabled":0,"is_custom":0,"desk_access":1,"two_factor_auth":0,"__run_link_triggers":1,"role_name":"Passport Data Entry Clerk"}', 'cmd': 'frappe.client.save'}
+2026-09-28 16:44:31,544 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"docstatus":0,"doctype":"Role","name":"new-role-fkeagpaenh","__islocal":1,"__unsaved":1,"owner":"Administrator","disabled":0,"is_custom":0,"desk_access":1,"two_factor_auth":0,"__run_link_triggers":false,"role_name":"Passport Data Entry Clerk","home_page":"/app/passport-application"}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-28 16:45:35,198 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'role', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-28 16:45:53,119 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 16:48:52,989 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 16:49:34,168 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 16:50:34,837 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 17:15:22,468 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'DocType', 'name': 'Passport Application', 'cmd': 'frappe.desk.form.load.getdoc'}
+2026-09-28 17:21:20,719 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 17:21:57,508 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 17:27:55,496 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'User', 'name': 'Administrator', 'cmd': 'frappe.desk.form.load.getdoc'}
+2026-09-28 17:31:35,633 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-28 17:33:45,027 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'workflow', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 10:47:04,104 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-29 10:53:14,456 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-29 10:54:17,512 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-29 10:56:40,099 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"docstatus":0,"doctype":"Passport Application","name":"new-passport-application-ldcxyfibmr","__islocal":1,"__unsaved":1,"owner":"clerk@passport.local","gender":"Male","workflow_state":"Draft","first_name":"محمد علي","father_name":"أبذر","grandfather_name":"مهدي","family_name":"الرضا","date_of_birth":"2002-12-28","place_of_birth":"الكوفة","national_id":"٧٦٥٤٣٢١","applicant_photo":"/private/files/Gemini_Generated_Image_wwbooxwwbooxwwbo.png","applicant_signature":"/private/files/IMG_6745.HEIC"}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-29 10:56:46,613 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"docstatus":0,"doctype":"Passport Application","name":"new-passport-application-ldcxyfibmr","__islocal":1,"__unsaved":1,"owner":"clerk@passport.local","gender":"Male","workflow_state":"Draft","first_name":"محمد علي","father_name":"أبذر","grandfather_name":"مهدي","family_name":"الرضا","date_of_birth":"2002-12-28","place_of_birth":"الكوفة","national_id":"٧٦٥٤٣٢١","applicant_photo":"/private/files/Gemini_Generated_Image_wwbooxwwbooxwwbo.png","applicant_signature":"/private/files/IMG_6745.HEIC"}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-29 11:00:43,246 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 11:00:54,605 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-29 11:07:35,285 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 11:10:56,320 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"docstatus":0,"doctype":"Passport Application","name":"new-passport-application-bpquppkddo","__islocal":1,"__unsaved":1,"owner":"clerk@passport.local","gender":"Male","workflow_state":"Draft","first_name":"محمد علي","father_name":"أبوذر","grandfather_name":"مهدي","family_name":"الرضا","date_of_birth":"2002-12-28","place_of_birth":"الكوفة","national_id":"٨٧٦٥٤٣٢١","applicant_photo":"/private/files/Gemini_Generated_Image_wwbooxwwbooxwwbo.png","applicant_signature":"/private/files/IMG_6745.HEIC"}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-29 11:11:15,552 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 12:02:51,237 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-29 12:03:27,161 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'email_account': 'Clerk', 'password': '********', 'cmd': 'frappe.email.doctype.email_account.email_account.set_email_password'}
+2026-09-29 12:04:58,013 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'محمد علي-أبوذر-الرضا', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 12:04:58,015 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'محمد علي-أبوذر-الرضا', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 12:05:57,978 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'new-passport-application-usnonblhvf', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 12:10:01,996 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 12:13:17,781 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"docstatus":0,"doctype":"Passport Application","name":"new-passport-application-phjcdttacf","__islocal":1,"__unsaved":1,"owner":"clerk@passport.local","gender":"Male","workflow_state":"Draft","first_name":"ali","father_name":"h","grandfather_name":"kai","family_name":"hih","date_of_birth":"2000-02-08","place_of_birth":"najaf","national_id":"98765432","applicant_photo":"/private/files/Gemini_Generated_Image_wwbooxwwbooxwwbo.png","applicant_signature":"/private/files/IMG_6745.HEIC"}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-29 12:13:36,185 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'ali-h-hih', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 12:13:36,187 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 12:19:33,285 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 12:22:14,228 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 12:23:08,614 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 13:45:01,463 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'fghj-rtyhuj-gvbhnjm', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 13:45:02,513 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'fghj-rtyhuj-gvbhnjm', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 13:53:51,085 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'ali-hayder-hj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 13:53:51,085 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'ali-hayder-hj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 16:37:32,968 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:37:32,968 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:37:48,137 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:37:48,137 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:38:48,940 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:38:48,940 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:39:03,342 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:39:03,342 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:39:58,307 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:39:58,308 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:05,073 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:05,073 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:13,075 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:13,077 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:17,889 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:17,890 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:19,933 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:19,936 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:40,562 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:40,565 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:40:44,246 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:41:55,508 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:41:55,508 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:42:53,442 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:43:01,976 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:43:01,977 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:43:12,176 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:43:12,183 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:43:18,101 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:43:24,871 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:43:24,888 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:43:25,598 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:43:25,598 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:44:58,927 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:44:58,927 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:44:59,533 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:44:59,533 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:45:04,406 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:45:04,408 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'setup-wizard', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:54:15,106 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {}
+2026-09-29 16:54:26,364 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'name': 'app', 'cmd': 'frappe.desk.desk_page.getpage'}
+2026-09-29 16:55:15,832 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'DocType', 'fields': '["`tabDocType`.`name`","`tabDocType`.`owner`","`tabDocType`.`creation`","`tabDocType`.`modified`","`tabDocType`.`modified_by`","`tabDocType`.`_user_tags`","`tabDocType`.`_comments`","`tabDocType`.`_assign`","`tabDocType`.`_liked_by`","`tabDocType`.`docstatus`","`tabDocType`.`idx`","`tabDocType`.`module`","`tabDocType`.`color`"]', 'filters': '[]', 'order_by': '`tabDocType`.`creation` desc', 'start': '0', 'page_length': '20', 'view': 'List', 'group_by': '', 'with_comment_count': '1', 'cmd': 'frappe.desk.reportview.get'}
+2026-09-29 16:55:20,841 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'DocType', 'name': '', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 16:56:51,476 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'DocType', 'name': 'Passport Application', 'cmd': 'frappe.desk.form.load.getdoc'}
+2026-09-29 16:58:24,414 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'محمد علي-ابوذر-الرضا', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 16:58:24,414 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'محمد علي-ابوذر-الرضا', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:18:53,822 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'sdfg-fghjk-kjhg', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:19:13,950 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'sdfg-fghjk-kjhg', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:23:02,082 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'bmmhvnc-iuytfgyhuj-iuyftygyhuj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:23:02,082 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'bmmhvnc-iuytfgyhuj-iuyftygyhuj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:23:07,061 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'bmmhvnc-iuytfgyhuj-iuyftygyhuj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:23:14,662 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'bmmhvnc-iuytfgyhuj-iuyftygyhuj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:23:14,665 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'bmmhvnc-iuytfgyhuj-iuyftygyhuj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:23:19,673 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'bmmhvnc-iuytfgyhuj-iuyftygyhuj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:24:40,414 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'new-passport-application-qpphwtlmln', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:13,316 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:13,316 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:26,618 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:26,619 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:39,465 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:39,465 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:44,454 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:49,489 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:49,490 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:51,886 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:59,641 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:25:59,643 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:26:04,640 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'hgfghj-jhgfghyu-jhgfdfghj', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:27:38,429 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"docstatus":0,"doctype":"Passport Application","name":"new-passport-application-gfsiqpmpbn","__islocal":1,"__unsaved":1,"owner":"clerk@passport.local","gender":"Male","workflow_state":"Draft","first_name":"Mohammed Ali","father_name":"Another","grandfather_name":"Mahdi","family_name":"al-Reda","date_of_birth":"2002-12-28","place_of_birth":"kufa","national_id":"7654345678","applicant_photo":"/private/files/Gemini_Generated_Image_wwbooxwwbooxwwbo.png"}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-29 17:27:44,126 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doc': '{"docstatus":0,"doctype":"Passport Application","name":"new-passport-application-gfsiqpmpbn","__islocal":1,"__unsaved":1,"owner":"clerk@passport.local","gender":"Male","workflow_state":"Draft","first_name":"Mohammed Ali","father_name":"Another","grandfather_name":"Mahdi","family_name":"al-Reda","date_of_birth":"2002-12-28","place_of_birth":"kufa","national_id":"7654345678","applicant_photo":"/private/files/Gemini_Generated_Image_wwbooxwwbooxwwbo.png"}', 'action': 'Save', 'cmd': 'frappe.desk.form.save.savedocs'}
+2026-09-29 17:28:08,958 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'Mohammed Ali-Another-al-Reda', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:28:25,379 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'Mohammed Ali-Another-al-Reda', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:28:35,548 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'Mohammed Ali-Another-al-Reda', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:28:35,553 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'Mohammed Ali-Another-al-Reda', 'cmd': 'frappe.realtime.has_permission'}
+2026-09-29 17:28:40,574 ERROR frappe New Exception collected in error log
+Site: passport.local
+Form Dict: {'doctype': 'Passport Application', 'name': 'Mohammed Ali-Another-al-Reda', 'cmd': 'frappe.realtime.has_permission'}

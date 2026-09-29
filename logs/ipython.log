@@ -1,0 +1,1083 @@
+2026-09-29 17:16:35,545 INFO ipython import frappe
+import os
+
+# ============================================================
+# 1. ADD WHITELISTED SERVER METHOD FOR SIGNATURE UPLOAD
+# ============================================================
+py_path = frappe.get_app_path("passport_system", "passport_system", "doctype", "passport_application", "passport_application.py")
+
+with open(py_path, "r") as f:
+    content = f.read()
+
+method_code = '''
+@frappe.whitelist()
+def upload_applicant_signature(docname, image_data):
+    if not docname or not image_data:
+        frappe.throw("Missing parameters")
+    
+    import base64
+    from frappe.utils.file_manager import save_file
+
+    if "," in image_data:
+        image_data = image_data.split(",")[1]
+
+    file_bytes = base64.b64decode(image_data)
+    file_name = f"sig_{docname.replace(' ', '_')}.png"
+
+    file_doc = save_file(
+        fname=file_name,
+        content=file_bytes,
+        dt="Passport Application",
+        dn=docname,
+        is_private=0
+    )
+
+    frappe.db.set_value("Passport Application", docname, "applicant_signature", file_doc.file_url)
+    frappe.db.commit()
+    return {"file_url": file_doc.file_url}
+'''
+
+if "def upload_applicant_signature" not in content:
+    with open(py_path, "a") as f:
+        f.write("\n\n" + method_code)
+    print(">>> [OK] Appended upload_applicant_signature endpoint.")
+
+# ============================================================
+# 2. UPDATE SIGNATURE PAD HTML (WITH DYNAMIC CSRF TOKEN)
+# ============================================================
+www_path = os.path.join(frappe.get_app_path("passport_system"), "www")
+sign_html_file = os.path.join(www_path, "passport_sign.html")
+
+sign_html = """<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>توقيع صاحب الجواز</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body {
+            margin: 0; padding: 20px; background: #f8fafc;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff; padding: 24px; border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06); width: 100%; max-width: 600px; text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        h2 { margin-top: 0; color: #0f172a; font-size: 19px; }
+        p { color: #64748b; font-size: 13.5px; margin-bottom: 16px; }
+        .canvas-box {
+            border: 2px dashed #94a3b8; border-radius: 8px; background: #fff;
+            position: relative; touch-action: none;
+        }
+        canvas { width: 100%; height: 220px; display: block; cursor: crosshair; }
+        .btn-group { display: flex; gap: 10px; margin-top: 18px; justify-content: center; }
+        button {
+            padding: 9px 18px; font-size: 14px; font-weight: 600; border-radius: 6px; border: none; cursor: pointer;
+        }
+        .btn-save { background: #15803d; color: #ffffff; }
+        .btn-save:hover { background: #166534; }
+        .btn-clear { background: #e2e8f0; color: #334155; }
+        .btn-cancel { background: #fee2e2; color: #991b1b; }
+        #msg { margin-top: 12px; font-size: 13.5px; font-weight: 600; min-height: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>لوحة التوقيع الرقمي (Signature Pad)</h2>
+        <p>يرجى كتابة التوقيع داخل المستطيل أدناه ثم الضغط على "حفظ التوقيع والعودة"</p>
+
+        <div class="canvas-box">
+            <canvas id="sig-canvas" width="580" height="220"></canvas>
+        </div>
+
+        <div id="msg"></div>
+
+        <div class="btn-group">
+            <button class="btn-save" id="btn-save" onclick="save()">💾 حفظ التوقيع والعودة</button>
+            <button class="btn-clear" onclick="clearPad()">مسح</button>
+            <button class="btn-cancel" onclick="window.close()">إغلاق</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('sig-canvas');
+        const ctx = canvas.getContext('2d');
+        const msg = document.getElementById('msg');
+        let isDrawing = false;
+        let drawn = false;
+
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const cx = e.touches ? e.touches[0].clientX : e.clientX;
+            const cy = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: (cx - rect.left) * (canvas.width / rect.width),
+                y: (cy - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        function start(e) {
+            e.preventDefault();
+            isDrawing = true;
+            drawn = true;
+            const p = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            const p = getPos(e);
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+        }
+
+        function stop(e) {
+            if (isDrawing) {
+                isDrawing = false;
+                ctx.closePath();
+            }
+        }
+
+        canvas.addEventListener('mousedown', start);
+        canvas.addEventListener('mousemove', draw);
+        window.addEventListener('mouseup', stop);
+
+        canvas.addEventListener('touchstart', start, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stop);
+
+        function clearPad() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawn = false;
+            msg.innerText = '';
+        }
+
+        function getCookie(name) {
+            let cookieArr = document.cookie.split(";");
+            for(let i = 0; i < cookieArr.length; i++) {
+                let cookiePair = cookieArr[i].trim();
+                if (cookiePair.startsWith(name + "=")) {
+                    return decodeURIComponent(cookiePair.substring(name.length + 1));
+                }
+            }
+            return "";
+        }
+
+        async function save() {
+            if (!drawn) {
+                alert('يرجى رسم التوقيع أولاً');
+                return;
+            }
+
+            const params = new URLSearchParams(window.location.search);
+            const docname = params.get('docname');
+            if (!docname) {
+                alert('اسم المستند غير موجود');
+                return;
+            }
+
+            const btn = document.getElementById('btn-save');
+            btn.disabled = true;
+            msg.style.color = '#0284c7';
+            msg.innerText = 'جاري حفظ التوقيع...';
+
+            const dataUrl = canvas.toDataURL('image/png');
+            const csrfToken = getCookie('csrf_token') || '{{ frappe.session.csrf_token }}';
+
+            try {
+                const formData = new FormData();
+                formData.append('docname', docname);
+                formData.append('image_data', dataUrl);
+
+                const res = await fetch('/api/method/passport_system.passport_system.doctype.passport_application.passport_application.upload_applicant_signature', {
+                    method: 'POST',
+                    headers: {
+                        'X-Frappe-CSRF-Token': csrfToken
+                    },
+                    body: formData
+                });
+
+                const data = await res.json();
+                if (data.message && data.message.file_url) {
+                    msg.style.color = '#15803d';
+                    msg.innerText = '✅ تم الحفظ بنجاح!';
+
+                    if (window.opener && !window.opener.closed) {
+                        window.opener.postMessage({
+                            type: 'PASSPORT_SIGNATURE_SAVED',
+                            docname: docname,
+                            file_url: data.message.file_url
+                        }, '*');
+                    }
+
+                    setTimeout(() => window.close(), 600);
+                } else {
+                    throw new Error(data.exc || 'فشل حفظ الملف');
+                }
+            } catch (err) {
+                console.error(err);
+                msg.style.color = '#b91c1c';
+                msg.innerText = 'خطأ أثناء الحفظ. يرجى المحاولة ثانية.';
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
+"""
+
+with open(sign_html_file, "w") as f:
+    f.write(sign_html)
+
+# ============================================================
+# 3. CONVERT APPLICANT_SIGNATURE IN DOCTYPE AND HIDE ATTACH UI
+# ============================================================
+dt = frappe.get_doc("DocType", "Passport Application")
+for f in dt.fields:
+    if f.fieldname == "applicant_signature":
+        # Keep as Data field so no "Attach" file upload button is displayed at all
+        f.fieldtype = "Data"
+        f.hidden = 1
+dt.save(ignore_permissions=True)
+
+# ============================================================
+# 4. UPDATE CLIENT SCRIPT (CLEAN LINK ONLY, NO ATTACH BUTTON)
+# ============================================================
+cs_code = """
+frappe.ui.form.on('Passport Application', {
+    refresh(frm) {
+        // Remove standard attach field controls if any remained
+        frm.toggle_display('applicant_signature', false);
+
+        // Listen for message from signature pad tab
+        if (!window.has_passport_signature_listener) {
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'PASSPORT_SIGNATURE_SAVED') {
+                    if (cur_frm && cur_frm.doc.name === event.data.docname) {
+                        frappe.show_alert({
+                            message: __('تم حفظ التوقيع وإدراجه في المعاملة!'),
+                            indicator: 'green'
+                        });
+                        cur_frm.reload_doc();
+                    }
+                }
+            });
+            window.has_passport_signature_listener = true;
+        }
+
+        // Render clean custom signature link container under Biometrics
+        render_clean_sign_link(frm);
+
+        // Workflow buttons visibility
+        const state = frm.doc.workflow_state || 'Draft';
+        const roles = frappe.user_roles;
+        const is_clerk = roles.includes('Passport Data Entry Clerk') || roles.includes('System Manager');
+        const is_manager = roles.includes('Passport Manager') || roles.includes('System Manager');
+        const is_admin = roles.includes('Passport Administrator') || roles.includes('System Manager');
+
+        if (frm.fields_dict['btn_clerk_submit']) {
+            frm.toggle_display('btn_clerk_submit', state === 'Draft' && is_clerk);
+            frm.toggle_display('btn_manager_approve', state === 'Pending Manager Review' && is_manager);
+            frm.toggle_display('btn_manager_send_back', state === 'Pending Manager Review' && is_manager);
+            frm.toggle_display('btn_admin_issue', state === 'Pending Admin Authorization' && is_admin);
+            frm.toggle_display('btn_print_booklet', state === 'Issued / Ready to Print' || frm.doc.docstatus === 1);
+        }
+    }
+});
+
+function render_clean_sign_link(frm) {
+    $('.passport-custom-signature-area').remove();
+
+    let sig_preview = '';
+    if (frm.doc.applicant_signature) {
+        sig_preview = `
+            <div style="margin-top: 8px; border: 1px dashed #94a3b8; border-radius: 6px; padding: 6px; background: #ffffff; display: inline-block;">
+                <img src="${frm.doc.applicant_signature}" style="max-height: 60px; max-width: 200px; display: block;" />
+            </div>
+        `;
+    }
+
+    const container = $(`
+        <div class="passport-custom-signature-area form-group" style="margin-top: 15px; margin-bottom: 15px;">
+            <div class="clearfix">
+                <label class="control-label" style="font-weight: 600; color: #1e293b; font-size: 12.5px;">
+                    التوقيع الرقمي (Digital Signature)
+                </label>
+            </div>
+            <div style="margin-top: 4px;">
+                <a href="javascript:void(0);" class="btn-open-sign-link" style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    color: #0284c7;
+                    font-weight: 600;
+                    font-size: 13.5px;
+                    text-decoration: underline;
+                    cursor: pointer;
+                ">
+                    ✍️ اضغط هنا لفتح لوحة التوقيع في نافذة جديدة
+                </a>
+            </div>
+            ${sig_preview}
+        </div>
+    `);
+
+    container.find('.btn-open-sign-link').on('click', function() {
+        if (frm.is_new()) {
+            frappe.msgprint(__('يرجى حفظ بيانات المعاملة أولاً قبل إضافة التوقيع'));
+            return;
+        }
+        const url = `/passport_sign?docname=${encodeURIComponent(frm.doc.name)}`;
+        window.open(url, '_blank');
+    });
+
+    // Place it inside the Biometrics & Media column
+    const photo_wrapper = frm.fields_dict['applicant_photo']?.$wrapper;
+    if (photo_wrapper && photo_wrapper.length) {
+        photo_wrapper.after(container);
+    } else {
+        $(frm.layout.wrapper).find('.form-layout').prepend(container);
+    }
+}
+
+function apply_action(frm, action_name) {
+    frappe.confirm(`هل أنت متأكد من تنفيذ الإجراء: "${action_name}"؟`, () => {
+        frappe.xcall('frappe.model.workflow.apply_workflow', {
+            doc: frm.doc,
+            action: action_name
+        }).then(() => frm.reload_doc());
+    });
+}
+"""
+
+cs_name = "Passport Application Action Buttons"
+cs = frappe.get_doc("Client Script", cs_name)
+cs.script = cs_code
+cs.save(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] CSRF fix & clean signature link applied!")
+exit()
+2026-09-29 17:16:35,546 INFO ipython import frappe
+
+# 1. Fix DocType schema: Make applicant_signature Data, not mandatory, hidden
+dt = frappe.get_doc("DocType", "Passport Application")
+for f in dt.fields:
+    if f.fieldname == "applicant_signature":
+        f.fieldtype = "Data"
+        f.reqd = 0
+        f.hidden = 1
+dt.save(ignore_permissions=True)
+
+# 2. Update Client Script to embed the clean clickable text link only
+cs_code = """
+frappe.ui.form.on('Passport Application', {
+    refresh(frm) {
+        frm.toggle_display('applicant_signature', false);
+
+        if (!window.has_passport_signature_listener) {
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'PASSPORT_SIGNATURE_SAVED') {
+                    if (cur_frm && cur_frm.doc.name === event.data.docname) {
+                        frappe.show_alert({
+                            message: __('تم حفظ التوقيع وإدراجه في المعاملة!'),
+                            indicator: 'green'
+                        });
+                        cur_frm.reload_doc();
+                    }
+                }
+            });
+            window.has_passport_signature_listener = true;
+        }
+
+        render_clean_sign_link(frm);
+
+        const state = frm.doc.workflow_state || 'Draft';
+        const roles = frappe.user_roles;
+        const is_clerk = roles.includes('Passport Data Entry Clerk') || roles.includes('System Manager');
+        const is_manager = roles.includes('Passport Manager') || roles.includes('System Manager');
+        const is_admin = roles.includes('Passport Administrator') || roles.includes('System Manager');
+
+        if (frm.fields_dict['btn_clerk_submit']) {
+            frm.toggle_display('btn_clerk_submit', state === 'Draft' && is_clerk);
+            frm.toggle_display('btn_manager_approve', state === 'Pending Manager Review' && is_manager);
+            frm.toggle_display('btn_manager_send_back', state === 'Pending Manager Review' && is_manager);
+            frm.toggle_display('btn_admin_issue', state === 'Pending Admin Authorization' && is_admin);
+            frm.toggle_display('btn_print_booklet', state === 'Issued / Ready to Print' || frm.doc.docstatus === 1);
+        }
+    }
+});
+
+function render_clean_sign_link(frm) {
+    $('.passport-custom-signature-area').remove();
+
+    let sig_preview = '';
+    if (frm.doc.applicant_signature) {
+        sig_preview = `
+            <div style="margin-top: 8px; border: 1px dashed #94a3b8; border-radius: 6px; padding: 6px; background: #ffffff; display: inline-block;">
+                <img src="${frm.doc.applicant_signature}" style="max-height: 60px; max-width: 200px; display: block;" />
+            </div>
+        `;
+    }
+
+    const container = $(`
+        <div class="passport-custom-signature-area form-group" style="margin-top: 15px; margin-bottom: 15px;">
+            <div class="clearfix">
+                <label class="control-label" style="font-weight: 600; color: #1e293b; font-size: 12.5px;">
+                    التوقيع الرقمي (Digital Signature)
+                </label>
+            </div>
+            <div style="margin-top: 4px;">
+                <a href="javascript:void(0);" class="btn-open-sign-link" style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    color: #0284c7;
+                    font-weight: 600;
+                    font-size: 13.5px;
+                    text-decoration: underline;
+                    cursor: pointer;
+                ">
+                    ✍️ اضغط هنا لفتح لوحة التوقيع في نافذة جديدة
+                </a>
+            </div>
+            ${sig_preview}
+        </div>
+    `);
+
+    container.find('.btn-open-sign-link').on('click', function() {
+        if (frm.is_new()) {
+            frappe.msgprint(__('يرجى حفظ بيانات المعاملة أولاً قبل إضافة التوقيع'));
+            return;
+        }
+        const url = `/passport_sign?docname=${encodeURIComponent(frm.doc.name)}`;
+        window.open(url, '_blank');
+    });
+
+    const photo_wrapper = frm.fields_dict['applicant_photo']?.$wrapper;
+    if (photo_wrapper && photo_wrapper.length) {
+        photo_wrapper.after(container);
+    } else {
+        $(frm.layout.wrapper).find('.form-layout').prepend(container);
+    }
+}
+
+function apply_action(frm, action_name) {
+    frappe.confirm(`هل أنت متأكد من تنفيذ الإجراء: "${action_name}"؟`, () => {
+        frappe.xcall('frappe.model.workflow.apply_workflow', {
+            doc: frm.doc,
+            action: action_name
+        }).then(() => frm.reload_doc());
+    });
+}
+"""
+
+cs_name = "Passport Application Action Buttons"
+cs = frappe.get_doc("Client Script", cs_name)
+cs.script = cs_code
+cs.save(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Schema saved and client script updated cleanly!")
+exit()
+2026-09-29 17:16:35,546 INFO ipython import frappe
+
+# 1. Revert applicant_signature fieldtype to "Attach Image" so MySQL doesn't truncate data
+dt = frappe.get_doc("DocType", "Passport Application")
+for f in dt.fields:
+    if f.fieldname == "applicant_signature":
+        f.fieldtype = "Attach Image"
+        f.reqd = 0
+        f.hidden = 0
+
+dt.save(ignore_permissions=True)
+print(">>> [OK] DocType schema saved successfully without MariaDB truncation errors.")
+
+# 2. Update Client Script: Completely hide the default 'Attach / إرفاق' button and show only the link
+cs_code = """
+frappe.ui.form.on('Passport Application', {
+    refresh(frm) {
+        // Completely hide the default Frappe Attach / Upload button
+        const sig_field = frm.fields_dict['applicant_signature'];
+        if (sig_field && sig_field.$wrapper) {
+            sig_field.$wrapper.find('.attached-file, .btn-attach, .file-upload, .btn-file-upload, .control-input-wrapper').hide();
+        }
+
+        // Listen for signature pad completion from the other tab
+        if (!window.has_passport_signature_listener) {
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'PASSPORT_SIGNATURE_SAVED') {
+                    if (cur_frm && cur_frm.doc.name === event.data.docname) {
+                        frappe.show_alert({
+                            message: __('تم حفظ التوقيع بنجاح!'),
+                            indicator: 'green'
+                        });
+                        cur_frm.reload_doc();
+                    }
+                }
+            });
+            window.has_passport_signature_listener = true;
+        }
+
+        // Render clean custom clickable text link
+        render_signature_link_only(frm);
+
+        // Manage Bottom Workflow Buttons
+        const state = frm.doc.workflow_state || 'Draft';
+        const roles = frappe.user_roles;
+        const is_clerk = roles.includes('Passport Data Entry Clerk') || roles.includes('System Manager');
+        const is_manager = roles.includes('Passport Manager') || roles.includes('System Manager');
+        const is_admin = roles.includes('Passport Administrator') || roles.includes('System Manager');
+
+        if (frm.fields_dict['btn_clerk_submit']) {
+            frm.toggle_display('btn_clerk_submit', state === 'Draft' && is_clerk);
+            frm.toggle_display('btn_manager_approve', state === 'Pending Manager Review' && is_manager);
+            frm.toggle_display('btn_manager_send_back', state === 'Pending Manager Review' && is_manager);
+            frm.toggle_display('btn_admin_issue', state === 'Pending Admin Authorization' && is_admin);
+            frm.toggle_display('btn_print_booklet', state === 'Issued / Ready to Print' || frm.doc.docstatus === 1);
+        }
+    }
+});
+
+function render_signature_link_only(frm) {
+    const field = frm.fields_dict['applicant_signature'];
+    if (!field) return;
+
+    field.$wrapper.find('.custom-sign-link-wrapper').remove();
+
+    let preview_html = '';
+    if (frm.doc.applicant_signature) {
+        preview_html = `
+            <div style="margin-top: 8px; border: 1px dashed #94a3b8; border-radius: 6px; padding: 6px; background: #ffffff; display: inline-block;">
+                <img src="${frm.doc.applicant_signature}" style="max-height: 55px; max-width: 190px; display: block;" />
+            </div>
+        `;
+    }
+
+    const custom_ui = $(`
+        <div class="custom-sign-link-wrapper" style="margin-top: 4px;">
+            <div>
+                <a href="javascript:void(0);" class="btn-open-sign-pad" style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    color: #0284c7;
+                    font-weight: 600;
+                    font-size: 13.5px;
+                    text-decoration: underline;
+                    cursor: pointer;
+                ">
+                    ✍️ اضغط هنا لفتح لوحة التوقيع في نافذة جديدة
+                </a>
+            </div>
+            ${preview_html}
+        </div>
+    `);
+
+    custom_ui.find('.btn-open-sign-pad').on('click', function() {
+        if (frm.is_new()) {
+            frappe.msgprint(__('يرجى حفظ بيانات المعاملة أولاً قبل إضافة التوقيع'));
+            return;
+        }
+        const sign_url = `/passport_sign?docname=${encodeURIComponent(frm.doc.name)}`;
+        window.open(sign_url, '_blank');
+    });
+
+    field.$wrapper.append(custom_ui);
+}
+
+function apply_action(frm, action_name) {
+    frappe.confirm(`هل أنت متأكد من تنفيذ الإجراء: "${action_name}"؟`, () => {
+        frappe.xcall('frappe.model.workflow.apply_workflow', {
+            doc: frm.doc,
+            action: action_name
+        }).then(() => frm.reload_doc());
+    });
+}
+"""
+
+cs_name = "Passport Application Action Buttons"
+cs = frappe.get_doc("Client Script", cs_name)
+cs.script = cs_code
+cs.save(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Schema error resolved and clean signature link activated!")
+exit()
+2026-09-29 17:16:35,546 INFO ipython === session end ===
+2026-09-29 17:21:39,605 INFO ipython === bench console session ===
+2026-09-29 17:21:39,605 INFO ipython import frappe
+import os
+
+www_path = os.path.join(frappe.get_app_path("passport_system"), "www")
+sign_html_file = os.path.join(www_path, "passport_sign.html")
+
+full_page_html = """<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التوقيع الرقمي / Signature Pad</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: #f4f5f7;
+        }
+
+        /* Frappe Header Style */
+        .page-head {
+            height: 58px;
+            padding: 10px 24px;
+            background: #ffffff;
+            border-bottom: 1px solid #d1d8dd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .title-area h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f272e;
+        }
+
+        .title-area span {
+            font-size: 12px;
+            color: #6c7680;
+        }
+
+        /* Frappe Standard Buttons */
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            border: 1px solid transparent;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background-color: #171717;
+            color: #ffffff;
+            border-color: #171717;
+        }
+        .btn-primary:hover {
+            background-color: #262626;
+        }
+
+        .btn-default {
+            background-color: #ffffff;
+            color: #1f272e;
+            border-color: #d1d8dd;
+        }
+        .btn-default:hover {
+            background-color: #f4f5f7;
+        }
+
+        .btn-danger {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+        .btn-danger:hover {
+            background-color: #fca5a5;
+        }
+
+        /* Full Height Canvas Container */
+        .canvas-wrapper {
+            flex: 1;
+            margin: 16px 24px 20px 24px;
+            background: #ffffff;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+        }
+
+        /* Transparent Canvas with checkerboard watermark guide */
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: crosshair;
+            touch-action: none;
+            background: transparent;
+        }
+
+        .baseline-guide {
+            position: absolute;
+            left: 8%;
+            right: 8%;
+            bottom: 25%;
+            border-bottom: 1.5px dashed #e2e8f0;
+            pointer-events: none;
+        }
+
+        .baseline-hint {
+            position: absolute;
+            left: 8%;
+            bottom: 27%;
+            font-size: 11px;
+            color: #94a3b8;
+            pointer-events: none;
+            font-weight: 500;
+        }
+
+        #status-bar {
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="page-head">
+        <div class="title-area">
+            <h1>لوحة توقيع صاحب الجواز (Applicant Digital Signature)</h1>
+            <span>يرجى التوقيع داخل المساحة المحددة أدناه</span>
+        </div>
+
+        <div class="btn-group">
+            <span id="status-bar"></span>
+            <button class="btn btn-default" onclick="clearCanvas()">مسح (Clear)</button>
+            <button class="btn btn-danger" onclick="window.close()">إلغاء (Cancel)</button>
+            <button class="btn btn-primary" id="btn-save" onclick="saveSignature()">حفظ وإغلاق (Save & Close)</button>
+        </div>
+    </header>
+
+    <main class="canvas-wrapper" id="canvas-container">
+        <div class="baseline-hint">خط التوقيع الافتراضي</div>
+        <div class="baseline-guide"></div>
+        <canvas id="signature-canvas"></canvas>
+    </main>
+
+    <script>
+        const canvas = document.getElementById('signature-canvas');
+        const container = document.getElementById('canvas-container');
+        const ctx = canvas.getContext('2d');
+        const statusBar = document.getElementById('status-bar');
+
+        let isDrawing = false;
+        let hasDrawn = false;
+
+        // Auto-scale canvas resolution to fill screen dynamically
+        function resizeCanvas() {
+            const rect = container.getBoundingClientRect();
+            // Store previous drawing if canvas is resized
+            const temp = hasDrawn ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
+
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 3.5;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            if (temp) {
+                ctx.putImageData(temp, 0, 0);
+            }
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function startDrawing(e) {
+            e.preventDefault();
+            isDrawing = true;
+            hasDrawn = true;
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing(e) {
+            if (isDrawing) {
+                isDrawing = false;
+                ctx.closePath();
+            }
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        window.addEventListener('mouseup', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasDrawn = false;
+            statusBar.innerText = '';
+        }
+
+        function getCookie(name) {
+            let cookieArr = document.cookie.split(";");
+            for(let i = 0; i < cookieArr.length; i++) {
+                let cookiePair = cookieArr[i].trim();
+                if (cookiePair.startsWith(name + "=")) {
+                    return decodeURIComponent(cookiePair.substring(name.length + 1));
+                }
+            }
+            return "";
+        }
+
+        // Crop transparent outer margins to avoid large empty space around signature
+        function getTrimmedCanvas(sourceCanvas) {
+            const copy = document.createElement('canvas');
+            const copyCtx = copy.getContext('2d');
+            const pixels = ctx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
+            const l = pixels.data.length;
+            let i, x, y, minX = sourceCanvas.width, minY = sourceCanvas.height, maxX = 0, maxY = 0;
+
+            for (i = 0; i < l; i += 4) {
+                if (pixels.data[i + 3] > 0) {
+                    x = (i / 4) % sourceCanvas.width;
+                    y = Math.floor((i / 4) / sourceCanvas.width);
+
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (y < minY) minY = y;
+                    if (y > maxY) maxY = y;
+                }
+            }
+
+            const pad = 10;
+            minX = Math.max(0, minX - pad);
+            minY = Math.max(0, minY - pad);
+            maxX = Math.min(sourceCanvas.width, maxX + pad);
+            maxY = Math.min(sourceCanvas.height, maxY + pad);
+
+            const trimmedWidth = maxX - minX;
+            const trimmedHeight = maxY - minY;
+
+            if (trimmedWidth <= 0 || trimmedHeight <= 0) return null;
+
+            copy.width = trimmedWidth;
+            copy.height = trimmedHeight;
+            copyCtx.drawImage(sourceCanvas, minX, minY, trimmedWidth, trimmedHeight, 0, 0, trimmedWidth, trimmedHeight);
+            return copy;
+        }
+
+        async function saveSignature() {
+            if (!hasDrawn) {
+                alert('يرجى رسم التوقيع أولاً');
+                return;
+            }
+
+            const params = new URLSearchParams(window.location.search);
+            const docname = params.get('docname');
+            if (!docname) {
+                alert('اسم المستند غير محدد');
+                return;
+            }
+
+            const saveBtn = document.getElementById('btn-save');
+            saveBtn.disabled = true;
+            statusBar.style.color = '#2563eb';
+            statusBar.innerText = 'جاري الحفظ...';
+
+            // Get tightly cropped transparent canvas
+            const trimmed = getTrimmedCanvas(canvas) || canvas;
+            const dataUrl = trimmed.toDataURL('image/png'); // Guarantees transparent background
+
+            const csrfToken = getCookie('csrf_token') || '{{ frappe.session.csrf_token }}';
+
+            try {
+                const formData = new FormData();
+                formData.append('docname', docname);
+                formData.append('image_data', dataUrl);
+
+                const res = await fetch('/api/method/passport_system.passport_system.doctype.passport_application.passport_application.upload_applicant_signature', {
+                    method: 'POST',
+                    headers: {
+                        'X-Frappe-CSRF-Token': csrfToken
+                    },
+                    body: formData
+                });
+
+                const data = await res.json();
+                if (data.message && data.message.file_url) {
+                    statusBar.style.color = '#15803d';
+                    statusBar.innerText = 'تم الحفظ بنجاح!';
+
+                    if (window.opener && !window.opener.closed) {
+                        window.opener.postMessage({
+                            type: 'PASSPORT_SIGNATURE_SAVED',
+                            docname: docname,
+                            file_url: data.message.file_url
+                        }, '*');
+                    }
+
+                    setTimeout(() => window.close(), 400);
+                } else {
+                    throw new Error('فشل الحفظ');
+                }
+            } catch (err) {
+                console.error(err);
+                statusBar.style.color = '#dc2626';
+                statusBar.innerText = 'خطأ أثناء الحفظ';
+                saveBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
+"""
+
+with open(sign_html_file, "w") as f:
+    f.write(full_page_html)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Full-screen transparent signature pad deployed!")
+exit()
+2026-09-29 17:21:39,605 INFO ipython === session end ===
+2026-09-29 17:24:20,508 INFO ipython === bench console session ===
+2026-09-29 17:24:20,509 INFO ipython import frappe
+import io
+import base64
+from PIL import Image
+
+# 1. Update the upload method to convert white background to pure transparent alpha
+py_path = frappe.get_app_path("passport_system", "passport_system", "doctype", "passport_application", "passport_application.py")
+
+with open(py_path, "r") as f:
+    code = f.read()
+
+# Replace or insert transparent processing logic
+enhanced_method = '''
+@frappe.whitelist()
+def upload_applicant_signature(docname, image_data):
+    if not docname or not image_data:
+        frappe.throw("Missing parameters")
+    
+    import base64
+    import io
+    from PIL import Image
+    from frappe.utils.file_manager import save_file
+
+    if "," in image_data:
+        image_data = image_data.split(",")[1]
+
+    raw_bytes = base64.b64decode(image_data)
+    img = Image.open(io.BytesIO(raw_bytes)).convert("RGBA")
+
+    # Turn any white/near-white pixels into 100% transparent alpha
+    datas = img.getdata()
+    new_data = []
+    for item in datas:
+        # If pixel is close to white (RGB > 215), set alpha = 0
+        if item[0] > 215 and item[1] > 215 and item[2] > 215:
+            new_data.append((255, 255, 255, 0))
+        else:
+            new_data.append(item)
+    img.putdata(new_data)
+
+    output = io.BytesIO()
+    img.save(output, format="PNG")
+    clean_bytes = output.getvalue()
+
+    file_name = f"sig_{docname.replace(' ', '_')}.png"
+    file_doc = save_file(
+        fname=file_name,
+        content=clean_bytes,
+        dt="Passport Application",
+        dn=docname,
+        is_private=0
+    )
+
+    frappe.db.set_value("Passport Application", docname, "applicant_signature", file_doc.file_url)
+    frappe.db.commit()
+    return {"file_url": file_doc.file_url}
+'''
+
+# 2. Fix the existing document shown in your screenshot right now
+target_doc = frappe.get_last_doc("Passport Application")
+if target_doc.applicant_signature:
+    try:
+        # Load existing image from private/public path
+        file_doc = frappe.get_doc("File", {"file_url": target_doc.applicant_signature})
+        file_path = file_doc.get_full_path()
+        img = Image.open(file_path).convert("RGBA")
+        datas = img.getdata()
+        new_data = []
+        for item in datas:
+            if item[0] > 210 and item[1] > 210 and item[2] > 210:
+                new_data.append((255, 255, 255, 0))
+            else:
+                new_data.append(item)
+        img.putdata(new_data)
+        img.save(file_path, "PNG")
+        print(f">>> [FIXED] Cleaned background for existing signature: {target_doc.applicant_signature}")
+    except Exception as e:
+        print(f"Notice: {e}")
+
+# 3. Inject CSS blend mode into Print Format so any signature renders with ZERO background
+pf = frappe.get_doc("Print Format", "Passport TD3 Booklet Page")
+if ".signature-img {" in pf.html:
+    pf.html = pf.html.replace(
+        ".signature-img {",
+        ".signature-img {\n    mix-blend-mode: multiply !important;\n    background: transparent !important;"
+    )
+    pf.save(ignore_permissions=True)
+    print(">>> [OK] Injected mix-blend-mode: multiply into Print Format.")
+
+frappe.db.commit()
+print(">>> [SUCCESS] All signature white backgrounds removed!")
+exit()
+2026-09-29 17:24:20,509 INFO ipython === session end ===

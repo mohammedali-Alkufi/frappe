@@ -1,0 +1,152 @@
+2026-09-28 12:29:33,437 DEBUG cd frappe-bench && uv venv env --seed --python /opt/homebrew/bin/python3.14
+2026-09-28 12:29:35,212 LOG Getting frappe
+2026-09-28 12:29:35,212 DEBUG cd frappe-bench/apps && git clone https://github.com/frappe/frappe.git --branch version-16 --depth 1 --origin upstream
+2026-09-28 12:30:20,793 LOG Installing frappe
+2026-09-28 12:30:20,828 DEBUG cd /Users/al_kufi/frappe/frappe-bench && uv pip install --quiet -e /Users/al_kufi/frappe/frappe-bench/apps/frappe  --python /Users/al_kufi/frappe/frappe-bench/env/bin/python
+2026-09-28 12:30:25,842 DEBUG cd /Users/al_kufi/frappe/frappe-bench/apps/frappe && yarn install --check-files
+2026-09-28 12:30:31,058 DEBUG cd frappe-bench && bench build
+2026-09-28 12:30:31,184 INFO /Users/al_kufi/Library/Python/3.11/bin/bench build
+2026-09-28 12:30:42,092 LOG setting up backups
+2026-09-28 12:30:42,102 LOG backups were set up
+2026-09-28 12:30:42,102 INFO Bench frappe-bench initialized
+2026-09-28 12:31:13,445 INFO /Users/al_kufi/Library/Python/3.11/bin/bench new-site passport.local --admin-password admin
+2026-09-28 12:31:28,087 INFO /Users/al_kufi/Library/Python/3.11/bin/bench new-site passport.local --admin-password admin
+2026-09-28 12:31:38,841 INFO /Users/al_kufi/Library/Python/3.11/bin/bench new-site passport.local --admin-password admin
+2026-09-28 12:32:01,199 INFO /Users/al_kufi/Library/Python/3.11/bin/bench new-site passport.local --admin-password admin
+2026-09-28 12:32:11,598 INFO /Users/al_kufi/Library/Python/3.11/bin/bench new-site passport.local --admin-password admin
+2026-09-28 12:32:22,558 INFO /Users/al_kufi/Library/Python/3.11/bin/bench new-site passport.local --admin-password admin
+2026-09-28 12:32:31,692 INFO /Users/al_kufi/Library/Python/3.11/bin/bench new-site passport.local --admin-password admin
+2026-09-28 12:35:33,145 INFO /Users/al_kufi/Library/Python/3.11/bin/bench new-site passport.local --admin-password admin --db-root-password admin
+2026-09-28 12:36:52,609 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local set-config developer_mode 1
+2026-09-28 12:37:02,822 INFO /Users/al_kufi/Library/Python/3.11/bin/bench new-app passport_system
+2026-09-28 12:37:02,825 LOG creating new app passport_system
+2026-09-28 12:38:45,287 LOG Installing passport_system
+2026-09-28 12:38:45,288 DEBUG cd /Users/al_kufi/frappe/frappe-bench && uv pip install --quiet -e /Users/al_kufi/frappe/frappe-bench/apps/passport_system  --python /Users/al_kufi/frappe/frappe-bench/env/bin/python
+2026-09-28 12:38:45,670 DEBUG bench build --app passport_system
+2026-09-28 12:38:45,795 INFO /Users/al_kufi/Library/Python/3.11/bin/bench build --app passport_system
+2026-09-28 12:39:04,486 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local install-app passport_system
+2026-09-28 12:39:37,349 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local set-config developer_mode 1
+2026-09-28 12:39:48,531 INFO /Users/al_kufi/Library/Python/3.11/bin/bench start
+2026-09-28 12:39:48,915 INFO /Users/al_kufi/Library/Python/3.11/bin/bench watch
+2026-09-28 12:39:48,916 INFO /Users/al_kufi/Library/Python/3.11/bin/bench socketio
+2026-09-28 12:39:48,923 INFO /Users/al_kufi/Library/Python/3.11/bin/bench worker
+2026-09-28 12:39:48,924 INFO /Users/al_kufi/Library/Python/3.11/bin/bench serve --port 8000
+2026-09-28 12:39:48,931 INFO /Users/al_kufi/Library/Python/3.11/bin/bench schedule
+2026-09-28 16:14:04,454 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local set-password clerk@passport.local admin
+2026-09-28 16:35:49,400 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 16:37:48,099 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local execute frappe.permissions.add_permission --args ['Email Account', 'All', 0]
+2026-09-28 16:37:49,182 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 16:46:39,798 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-28 16:47:02,716 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 16:47:03,557 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local build --force
+2026-09-28 16:47:24,403 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-28 16:48:09,124 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local execute frappe.permissions.add_permission --args ['Email Account', 'All', 0]
+2026-09-28 16:48:14,494 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-28 16:48:29,143 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 17:20:49,045 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 17:20:50,063 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local migrate
+2026-09-28 17:21:02,963 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local execute frappe.permissions.add_permission --args ['DocType', 'Passport Data Entry Clerk', 0]
+2026-09-28 17:21:03,752 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 17:26:26,041 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 17:30:50,028 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-28 17:31:05,081 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 17:36:56,760 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-28 17:38:13,247 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 17:41:42,161 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-28 17:44:00,272 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-28 17:44:35,228 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 17:44:50,548 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-28 17:49:51,253 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 17:51:19,679 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-28 18:00:01,091 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --verbose --site all backup
+2026-09-28 18:00:01,155 INFO /Users/al_kufi/.local/bin/bench --verbose --site all backup
+2026-09-28 18:29:27,912 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-28 18:29:46,002 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 00:00:01,482 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --verbose --site all backup
+2026-09-29 00:00:01,506 INFO /Users/al_kufi/.local/bin/bench --verbose --site all backup
+2026-09-29 10:44:56,302 INFO /Users/al_kufi/Library/Python/3.11/bin/bench start
+2026-09-29 10:45:33,946 INFO /Users/al_kufi/Library/Python/3.11/bin/bench start
+2026-09-29 10:46:03,896 INFO /Users/al_kufi/Library/Python/3.11/bin/bench start
+2026-09-29 10:46:04,197 INFO /Users/al_kufi/Library/Python/3.11/bin/bench serve --port 8000
+2026-09-29 10:46:04,206 INFO /Users/al_kufi/Library/Python/3.11/bin/bench schedule
+2026-09-29 10:46:04,206 INFO /Users/al_kufi/Library/Python/3.11/bin/bench socketio
+2026-09-29 10:46:04,206 INFO /Users/al_kufi/Library/Python/3.11/bin/bench watch
+2026-09-29 10:46:04,206 INFO /Users/al_kufi/Library/Python/3.11/bin/bench worker
+2026-09-29 10:48:31,785 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 10:49:21,555 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 10:49:22,336 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local build
+2026-09-29 10:53:44,947 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 10:53:57,679 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 11:06:50,878 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 11:07:01,388 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 11:08:16,098 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 11:08:28,441 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 11:08:35,601 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 11:08:46,580 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 12:00:01,193 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --verbose --site all backup
+2026-09-29 12:00:01,279 INFO /Users/al_kufi/.local/bin/bench --verbose --site all backup
+2026-09-29 12:01:56,185 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 12:02:37,642 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 12:04:12,613 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 12:04:28,267 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 12:08:14,078 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 12:08:29,618 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 12:11:52,213 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 12:12:07,467 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 13:35:54,988 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 13:36:11,856 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 13:53:10,450 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 13:53:33,530 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 13:59:47,793 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 14:00:15,557 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 16:29:14,635 INFO /Users/al_kufi/Library/Python/3.11/bin/bench get-app erpnext
+2026-09-29 16:29:15,565 LOG Getting erpnext
+2026-09-29 16:29:15,565 DEBUG cd ./apps && git clone https://github.com/frappe/erpnext.git  --depth 1 --origin upstream
+2026-09-29 16:30:43,653 LOG Installing erpnext
+2026-09-29 16:30:43,653 DEBUG cd /Users/al_kufi/frappe/frappe-bench && uv pip install --quiet -e /Users/al_kufi/frappe/frappe-bench/apps/erpnext  --python /Users/al_kufi/frappe/frappe-bench/env/bin/python
+2026-09-29 16:30:45,844 DEBUG cd /Users/al_kufi/frappe/frappe-bench/apps/erpnext && yarn install --check-files
+2026-09-29 16:30:53,550 DEBUG bench build --app erpnext
+2026-09-29 16:30:53,752 INFO /Users/al_kufi/Library/Python/3.11/bin/bench build --app erpnext
+2026-09-29 16:32:55,135 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local install-app erpnext
+2026-09-29 16:35:28,242 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local install-app erpnext
+2026-09-29 16:35:36,214 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local migrate
+2026-09-29 16:35:45,994 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 16:36:01,279 INFO /Users/al_kufi/Library/Python/3.11/bin/bench start
+2026-09-29 16:36:59,295 INFO /Users/al_kufi/Library/Python/3.11/bin/bench start
+2026-09-29 16:36:59,679 INFO /Users/al_kufi/Library/Python/3.11/bin/bench serve --port 8000
+2026-09-29 16:36:59,682 INFO /Users/al_kufi/Library/Python/3.11/bin/bench worker
+2026-09-29 16:36:59,684 INFO /Users/al_kufi/Library/Python/3.11/bin/bench watch
+2026-09-29 16:36:59,687 INFO /Users/al_kufi/Library/Python/3.11/bin/bench schedule
+2026-09-29 16:36:59,693 INFO /Users/al_kufi/Library/Python/3.11/bin/bench socketio
+2026-09-29 16:39:30,008 INFO /Users/al_kufi/Library/Python/3.11/bin/bench use passport.local
+2026-09-29 16:39:30,577 INFO /Users/al_kufi/Library/Python/3.11/bin/bench set-config -g serve_default_site 1
+2026-09-29 16:39:37,210 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 16:39:38,128 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local build
+2026-09-29 16:41:33,822 INFO /Users/al_kufi/Library/Python/3.11/bin/bench start
+2026-09-29 16:41:34,394 INFO /Users/al_kufi/Library/Python/3.11/bin/bench worker
+2026-09-29 16:41:34,394 INFO /Users/al_kufi/Library/Python/3.11/bin/bench watch
+2026-09-29 16:41:34,396 INFO /Users/al_kufi/Library/Python/3.11/bin/bench serve --port 8000
+2026-09-29 16:41:34,401 INFO /Users/al_kufi/Library/Python/3.11/bin/bench schedule
+2026-09-29 16:41:34,404 INFO /Users/al_kufi/Library/Python/3.11/bin/bench socketio
+2026-09-29 16:44:18,339 INFO /Users/al_kufi/Library/Python/3.11/bin/bench start
+2026-09-29 16:44:18,648 INFO /Users/al_kufi/Library/Python/3.11/bin/bench worker
+2026-09-29 16:44:35,838 INFO /Users/al_kufi/Library/Python/3.11/bin/bench start
+2026-09-29 16:44:36,312 INFO /Users/al_kufi/Library/Python/3.11/bin/bench serve --port 8000
+2026-09-29 16:44:36,334 INFO /Users/al_kufi/Library/Python/3.11/bin/bench socketio
+2026-09-29 16:44:36,376 INFO /Users/al_kufi/Library/Python/3.11/bin/bench watch
+2026-09-29 16:44:36,424 INFO /Users/al_kufi/Library/Python/3.11/bin/bench schedule
+2026-09-29 16:44:36,447 INFO /Users/al_kufi/Library/Python/3.11/bin/bench worker
+2026-09-29 16:47:37,333 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 16:48:28,778 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 16:53:05,300 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 16:53:58,782 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 17:09:22,339 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 17:09:45,208 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 17:11:52,977 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 17:12:05,913 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 17:15:22,552 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 17:16:41,620 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 17:21:28,304 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 17:21:48,280 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache
+2026-09-29 17:24:14,024 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local console
+2026-09-29 17:24:26,839 INFO /Users/al_kufi/Library/Python/3.11/bin/bench --site passport.local clear-cache

@@ -1,0 +1,2577 @@
+2026-09-28 16:46:59,768 INFO ipython === bench console session ===
+2026-09-28 16:46:59,768 INFO ipython import frappe
+
+# 1. Check if permission already exists for System User or All
+if not frappe.db.exists("Custom DocPerm", {"parent": "Email Account", "role": "System User"}):
+    perm = frappe.new_doc("Custom DocPerm")
+    perm.parent = "Email Account"
+    perm.parenttype = "DocType"
+    perm.parentfield = "permissions"
+    perm.role = "System User"
+    perm.read = 1
+    perm.permlevel = 0
+    perm.insert(ignore_permissions=True)
+
+# 2. Also grant read access to All role for standard desk initialization
+if not frappe.db.exists("Custom DocPerm", {"parent": "Email Account", "role": "All"}):
+    perm2 = frappe.new_doc("Custom DocPerm")
+    perm2.parent = "Email Account"
+    perm2.parenttype = "DocType"
+    perm2.parentfield = "permissions"
+    perm2.role = "All"
+    perm2.read = 1
+    perm2.permlevel = 0
+    perm2.insert(ignore_permissions=True)
+
+frappe.db.commit()
+print("--- Permissions successfully applied! ---")
+exit()
+2026-09-28 16:46:59,768 INFO ipython === session end ===
+2026-09-28 16:47:37,786 INFO ipython === bench console session ===
+2026-09-28 16:47:37,786 INFO ipython import frappe
+
+# 1. Check if permission already exists for System User or All
+if not frappe.db.exists("Custom DocPerm", {"parent": "Email Account", "role": "System User"}):
+    perm = frappe.new_doc("Custom DocPerm")
+    perm.parent = "Email Account"
+    perm.parenttype = "DocType"
+    perm.parentfield = "permissions"
+    perm.role = "System User"
+    perm.read = 1
+    perm.permlevel = 0
+    perm.insert(ignore_permissions=True)
+
+# 2. Also grant read access to All role for standard desk initialization
+if not frappe.db.exists("Custom DocPerm", {"parent": "Email Account", "role": "All"}):
+    perm2 = frappe.new_doc("Custom DocPerm")
+    perm2.parent = "Email Account"
+    perm2.parenttype = "DocType"
+    perm2.parentfield = "permissions"
+    perm2.role = "All"
+    perm2.read = 1
+    perm2.permlevel = 0
+    perm2.insert(ignore_permissions=True)
+
+frappe.db.commit()
+print("--- Permissions successfully applied! ---")
+exit()
+2026-09-28 16:47:37,787 INFO ipython exit;
+2026-09-28 16:47:37,787 INFO ipython === session end ===
+2026-09-28 16:48:23,352 INFO ipython === bench console session ===
+2026-09-28 16:48:23,353 INFO ipython import frappe
+from frappe.permissions import add_permission
+
+role = "Passport Data Entry Clerk"
+core_doctypes = [
+    "Email Account",
+    "Email Domain",
+    "Communication",
+    "File",
+    "DocType",
+    "Passport Application"
+]
+
+for dt in core_doctypes:
+    try:
+        add_permission(dt, role, 0)
+        frappe.permissions.update_permission_property(dt, role, 0, "read", 1)
+        if dt == "Passport Application":
+            frappe.permissions.update_permission_property(dt, role, 0, "write", 1)
+            frappe.permissions.update_permission_property(dt, role, 0, "create", 1)
+    except Exception as e:
+        pass
+
+frappe.db.commit()
+print(">>> Permissions successfully updated for Clerk!")
+exit()
+2026-09-28 16:48:23,353 INFO ipython === session end ===
+2026-09-28 17:30:56,067 INFO ipython === bench console session ===
+2026-09-28 17:30:56,068 INFO ipython import frappe
+from frappe.permissions import add_permission
+
+# 1. Create or fetch manager user
+email = "manager@passport.local"
+if not frappe.db.exists("User", email):
+    user = frappe.new_doc("User")
+    user.email = email
+    user.first_name = "Manager"
+    user.send_welcome_email = 0
+    user.user_type = "System User"
+    user.append("roles", {"role": "Passport Manager"})
+    user.insert(ignore_permissions=True)
+else:
+    user = frappe.get_doc("User", email)
+    if not any(r.role == "Passport Manager" for r in user.roles):
+        user.append("roles", {"role": "Passport Manager"})
+        user.save(ignore_permissions=True)
+
+# 2. Set password to admin (or your preferred test password)
+from frappe.utils.password import update_password
+update_password(user=email, pwd="admin")
+
+# 3. Ensure base Desk permissions to avoid the boot popup
+for dt in ["Email Account", "Communication", "Passport Application"]:
+    try:
+        add_permission(dt, "Passport Manager", 0)
+        frappe.permissions.update_permission_property(dt, "Passport Manager", 0, "read", 1)
+        if dt == "Passport Application":
+            frappe.permissions.update_permission_property(dt, "Passport Manager", 0, "write", 1)
+    except Exception:
+        pass
+
+frappe.db.commit()
+print(">>> Manager user ready!")
+exit()
+2026-09-28 17:30:56,068 INFO ipython === session end ===
+2026-09-28 17:38:04,031 INFO ipython === bench console session ===
+2026-09-28 17:38:04,032 INFO ipython import frappe
+from frappe.permissions import add_permission, update_permission_property
+
+# ============================================================
+# 1. ENSURE ALL ROLES EXIST
+# ============================================================
+roles = [
+    "Passport Data Entry Clerk",
+    "Passport Manager",
+    "Passport Administrator"
+]
+
+for r in roles:
+    if not frappe.db.exists("Role", r):
+        role_doc = frappe.new_doc("Role")
+        role_doc.role_name = r
+        role_doc.desk_access = 1
+        role_doc.insert(ignore_permissions=True)
+
+# ============================================================
+# 2. CONFIGURE DOCTYPE PERMISSIONS
+# ============================================================
+# Core DocTypes required to prevent boot/permission errors
+core_doctypes = ["Email Account", "Communication", "File", "DocType"]
+for dt in core_doctypes:
+    for r in roles:
+        try:
+            add_permission(dt, r, 0)
+            update_permission_property(dt, r, 0, "read", 1)
+        except Exception:
+            pass
+
+# Permissions for Passport Application
+# Clerk: Read, Write, Create (Level 0)
+add_permission("Passport Application", "Passport Data Entry Clerk", 0)
+update_permission_property("Passport Application", "Passport Data Entry Clerk", 0, "read", 1)
+update_permission_property("Passport Application", "Passport Data Entry Clerk", 0, "write", 1)
+update_permission_property("Passport Application", "Passport Data Entry Clerk", 0, "create", 1)
+
+# Manager: Read, Write (Level 0)
+add_permission("Passport Application", "Passport Manager", 0)
+update_permission_property("Passport Application", "Passport Manager", 0, "read", 1)
+update_permission_property("Passport Application", "Passport Manager", 0, "write", 1)
+
+# Administrator: Full Access + Submit
+add_permission("Passport Application", "Passport Administrator", 0)
+update_permission_property("Passport Application", "Passport Administrator", 0, "read", 1)
+update_permission_property("Passport Application", "Passport Administrator", 0, "write", 1)
+update_permission_property("Passport Application", "Passport Administrator", 0, "create", 1)
+update_permission_property("Passport Application", "Passport Administrator", 0, "submit", 1)
+update_permission_property("Passport Application", "Passport Administrator", 0, "cancel", 1)
+
+# ============================================================
+# 3. BUILD / OVERWRITE WORKFLOW STATE MACHINE
+# ============================================================
+workflow_name = "Passport Approval Workflow"
+
+# Ensure Workflow States exist
+states_data = [
+    {"state": "Draft", "doc_status": 0},
+    {"state": "Pending Manager Review", "doc_status": 0},
+    {"state": "Pending Admin Authorization", "doc_status": 0},
+    {"state": "Issued / Ready to Print", "doc_status": 1},
+    {"state": "Rejected", "doc_status": 2},
+]
+
+for s in states_data:
+    if not frappe.db.exists("Workflow State", s["state"]):
+        ws = frappe.new_doc("Workflow State")
+        ws.workflow_state_name = s["state"]
+        ws.insert(ignore_permissions=True)
+
+# Delete existing workflow if present to ensure clean rebuild
+if frappe.db.exists("Workflow", workflow_name):
+    frappe.delete_doc("Workflow", workflow_name, ignore_permissions=True)
+
+wf = frappe.new_doc("Workflow")
+wf.workflow_name = workflow_name
+wf.document_type = "Passport Application"
+wf.workflow_state_field = "workflow_state"
+wf.is_active = 1
+
+# Populate States table
+for s in states_data:
+    wf.append("states", {
+        "state": s["state"],
+        "doc_status": s["doc_status"],
+        "allow_edit": "Passport Data Entry Clerk" if s["state"] == "Draft" else "System Manager"
+    })
+
+# Populate Transitions table
+transitions = [
+    {
+        "state": "Draft",
+        "action": "Submit for Verification",
+        "next_state": "Pending Manager Review",
+        "allowed": "Passport Data Entry Clerk"
+    },
+    {
+        "state": "Pending Manager Review",
+        "action": "Approve",
+        "next_state": "Pending Admin Authorization",
+        "allowed": "Passport Manager"
+    },
+    {
+        "state": "Pending Manager Review",
+        "action": "Send Back for Correction",
+        "next_state": "Draft",
+        "allowed": "Passport Manager"
+    },
+    {
+        "state": "Pending Admin Authorization",
+        "action": "Final Authorize & Issue",
+        "next_state": "Issued / Ready to Print",
+        "allowed": "Passport Administrator"
+    },
+    {
+        "state": "Pending Admin Authorization",
+        "action": "Reject",
+        "next_state": "Draft",
+        "allowed": "Passport Administrator"
+    }
+]
+
+for t in transitions:
+    wf.append("transitions", t)
+
+wf.insert(ignore_permissions=True)
+frappe.db.commit()
+
+print(">>> [SUCCESS] All permissions, roles, and workflow transitions configured via CLI!")
+exit()
+2026-09-28 17:38:04,032 INFO ipython bench --site passport.local clear-cache
+bench --site passport.local migrate
+2026-09-28 17:38:04,032 INFO ipython import frappe
+
+# 1. Register all required Workflow Actions first
+required_actions = [
+    "Submit for Verification",
+    "Approve",
+    "Send Back for Correction",
+    "Final Authorize & Issue",
+    "Reject"
+]
+
+for act in required_actions:
+    if not frappe.db.exists("Workflow Action Master", act):
+        doc = frappe.new_doc("Workflow Action Master")
+        doc.workflow_action_name = act
+        doc.insert(ignore_permissions=True)
+
+# 2. Re-create the Workflow
+workflow_name = "Passport Approval Workflow"
+
+if frappe.db.exists("Workflow", workflow_name):
+    frappe.delete_doc("Workflow", workflow_name, ignore_permissions=True)
+
+wf = frappe.new_doc("Workflow")
+wf.workflow_name = workflow_name
+wf.document_type = "Passport Application"
+wf.workflow_state_field = "workflow_state"
+wf.is_active = 1
+
+states = [
+    {"state": "Draft", "doc_status": 0, "allow_edit": "Passport Data Entry Clerk"},
+    {"state": "Pending Manager Review", "doc_status": 0, "allow_edit": "Passport Manager"},
+    {"state": "Pending Admin Authorization", "doc_status": 0, "allow_edit": "Passport Administrator"},
+    {"state": "Issued / Ready to Print", "doc_status": 1, "allow_edit": "Passport Administrator"},
+    {"state": "Rejected", "doc_status": 2, "allow_edit": "Passport Administrator"}
+]
+
+for s in states:
+    wf.append("states", s)
+
+transitions = [
+    {
+        "state": "Draft",
+        "action": "Submit for Verification",
+        "next_state": "Pending Manager Review",
+        "allowed": "Passport Data Entry Clerk"
+    },
+    {
+        "state": "Pending Manager Review",
+        "action": "Approve",
+        "next_state": "Pending Admin Authorization",
+        "allowed": "Passport Manager"
+    },
+    {
+        "state": "Pending Manager Review",
+        "action": "Send Back for Correction",
+        "next_state": "Draft",
+        "allowed": "Passport Manager"
+    },
+    {
+        "state": "Pending Admin Authorization",
+        "action": "Final Authorize & Issue",
+        "next_state": "Issued / Ready to Print",
+        "allowed": "Passport Administrator"
+    },
+    {
+        "state": "Pending Admin Authorization",
+        "action": "Reject",
+        "next_state": "Draft",
+        "allowed": "Passport Administrator"
+    }
+]
+
+for t in transitions:
+    wf.append("transitions", t)
+
+wf.insert(ignore_permissions=True)
+frappe.db.commit()
+
+print(">>> [SUCCESS] Workflow Action Masters and Passport Workflow successfully deployed!")
+exit()
+2026-09-28 17:38:04,032 INFO ipython === session end ===
+2026-09-28 17:41:48,884 INFO ipython === bench console session ===
+2026-09-28 17:41:48,884 INFO ipython import frappe
+doc = frappe.get_last_doc("Passport Application")
+doc.workflow_state = "Pending Manager Review"
+doc.save(ignore_permissions=True)
+frappe.db.commit()
+print(">>> Moved to Pending Manager Review!")
+exit()
+2026-09-28 17:41:48,884 INFO ipython === session end ===
+2026-09-28 17:44:18,430 INFO ipython === bench console session ===
+2026-09-28 17:44:18,431 INFO ipython import frappe
+from frappe.permissions import add_permission
+from frappe.utils.password import update_password
+
+email = "admin_user@passport.local"
+
+# 1. Create or fetch administrator user
+if not frappe.db.exists("User", email):
+    user = frappe.new_doc("User")
+    user.email = email
+    user.first_name = "Passport Admin"
+    user.send_welcome_email = 0
+    user.user_type = "System User"
+    user.append("roles", {"role": "Passport Administrator"})
+    user.insert(ignore_permissions=True)
+else:
+    user = frappe.get_doc("User", email)
+    if not any(r.role == "Passport Administrator" for r in user.roles):
+        user.append("roles", {"role": "Passport Administrator"})
+        user.save(ignore_permissions=True)
+
+# 2. Set password
+update_password(user=email, pwd="admin")
+
+# 3. Base Desk doctype permissions
+for dt in ["Email Account", "Communication", "Passport Application", "File"]:
+    try:
+        add_permission(dt, "Passport Administrator", 0)
+        frappe.permissions.update_permission_property(dt, "Passport Administrator", 0, "read", 1)
+        frappe.permissions.update_permission_property(dt, "Passport Administrator", 0, "write", 1)
+        if dt == "Passport Application":
+            frappe.permissions.update_permission_property(dt, "Passport Administrator", 0, "submit", 1)
+    except Exception:
+        pass
+
+frappe.db.commit()
+print(">>> Passport Administrator ready!")
+exit()
+2026-09-28 17:44:18,431 INFO ipython === session end ===
+2026-09-28 17:44:57,121 INFO ipython === bench console session ===
+2026-09-28 17:44:57,121 INFO ipython import frappe
+doc = frappe.get_last_doc("Passport Application")
+doc.workflow_state = "Pending Admin Authorization"
+doc.save(ignore_permissions=True)
+frappe.db.commit()
+print(">>> Status is now Pending Admin Authorization!")
+exit()
+2026-09-28 17:44:57,121 INFO ipython === session end ===
+2026-09-28 18:29:39,116 INFO ipython === bench console session ===
+2026-09-28 18:29:39,116 INFO ipython import frappe
+from frappe.permissions import add_permission, update_permission_property
+
+role = "Passport Data Entry Clerk"
+
+# 1. Allow Clerk to Print Passport Application
+try:
+    update_permission_property("Passport Application", role, 0, "print", 1)
+except Exception:
+    pass
+
+# 2. Allow Clerk to Read Print Formats
+try:
+    add_permission("Print Format", role, 0)
+    update_permission_property("Print Format", role, 0, "read", 1)
+except Exception:
+    pass
+
+frappe.db.commit()
+print(">>> Print permissions successfully enabled for Clerk!")
+exit()
+2026-09-28 18:29:39,116 INFO ipython === session end ===
+2026-09-29 10:48:37,631 INFO ipython === bench console session ===
+2026-09-29 10:48:37,632 INFO ipython import frappe
+
+translations = {
+    "Passport Application": "استمارة إصدار الجواز",
+    "First Name": "الاسم الأول",
+    "Father Name": "اسم الأب",
+    "Grandfather Name": "اسم الجد",
+    "Family Name": "اللقب",
+    "National ID": "رقم البطاقة الوطنية",
+    "Date of Birth": "تاريخ الميلاد",
+    "Gender": "الجنس",
+    "Male": "ذكر",
+    "Female": "أنثى",
+    "Applicant Photo": "الصورة الشخصية",
+    "Applicant Signature": "التوقيع الرقمي",
+    "Passport Number": "رقم الجواز",
+    "Issue Date": "تاريخ الإصدار",
+    "Expiry Date": "تاريخ الانتهاء",
+    "Draft": "مسودة",
+    "Pending Manager Review": "قيد تدقيق المدير",
+    "Pending Admin Authorization": "قيد تخويل المسؤول",
+    "Issued / Ready to Print": "تم الإصدار / جاهز للطباعة",
+    "Print Passport Booklet": "طباعة دفتر الجواز"
+}
+
+for source, target in translations.items():
+    if not frappe.db.exists("Translation", {"source_text": source, "language": "ar"}):
+        t = frappe.new_doc("Translation")
+        t.language = "ar"
+        t.source_text = source
+        t.translated_text = target
+        t.insert(ignore_permissions=True)
+    else:
+        frappe.db.set_value("Translation", {"source_text": source, "language": "ar"}, "translated_text", target)
+
+frappe.db.commit()
+print(">>> Arabic translations loaded into database!")
+exit()
+2026-09-29 10:48:37,632 INFO ipython === session end ===
+2026-09-29 10:53:51,995 INFO ipython === bench console session ===
+2026-09-29 10:53:51,996 INFO ipython import frappe
+
+# 1. Give the clerk role direct read access on Email Account & Communication
+for dt in ["Email Account", "Communication"]:
+    doctype_doc = frappe.get_doc("DocType", dt)
+    roles = [p.role for p in doctype_doc.permissions]
+    if "Passport Data Entry Clerk" not in roles:
+        doctype_doc.append("permissions", {
+            "role": "Passport Data Entry Clerk",
+            "permlevel": 0,
+            "read": 1,
+            "select": 1
+        })
+        doctype_doc.save(ignore_permissions=True)
+
+# 2. Also attach standard "Employee" role if available to provide baseline framework access
+user = frappe.get_doc("User", "clerk@passport.local")
+user_roles = [r.role for r in user.roles]
+for base_role in ["Employee", "Desk User"]:
+    if frappe.db.exists("Role", base_role) and base_role not in user_roles:
+        user.append("roles", {"role": base_role})
+
+user.save(ignore_permissions=True)
+frappe.db.commit()
+print(">>> [FIXED] Email Account access granted to Clerk!")
+exit()
+2026-09-29 10:53:51,996 INFO ipython === session end ===
+2026-09-29 11:06:55,126 INFO ipython === bench console session ===
+2026-09-29 11:06:55,126 INFO ipython import frappe
+
+# 1. Verify Manager user has the role
+user = frappe.get_doc("User", "manager@passport.local")
+role_names = [r.role for r in user.roles]
+if "Passport Manager" not in role_names:
+    user.append("roles", {"role": "Passport Manager"})
+    user.save(ignore_permissions=True)
+    print("Added Passport Manager role to user.")
+
+# 2. Ensure the last application is in 'Pending Manager Review'
+doc = frappe.get_last_doc("Passport Application")
+print(f"Current Document: {doc.name}, Current State: {doc.workflow_state}")
+
+doc.workflow_state = "Pending Manager Review"
+doc.save(ignore_permissions=True)
+print(f"Updated {doc.name} workflow_state to 'Pending Manager Review'")
+
+# 3. Verify Workflow transition exists
+wf = frappe.get_doc("Workflow", "Passport Approval Workflow")
+has_transition = any(
+    t.state == "Pending Manager Review" and t.action == "Approve" and t.allowed == "Passport Manager"
+    for t in wf.transitions
+)
+
+if not has_transition:
+    wf.append("transitions", {
+        "state": "Pending Manager Review",
+        "action": "Approve",
+        "next_state": "Pending Admin Authorization",
+        "allowed": "Passport Manager"
+    })
+    wf.save(ignore_permissions=True)
+    print("Added missing Approve transition to Workflow.")
+
+frappe.db.commit()
+print(">>> Verification complete!")
+exit()
+2026-09-29 11:06:55,126 INFO ipython === session end ===
+2026-09-29 11:08:21,449 INFO ipython === bench console session ===
+2026-09-29 11:08:21,449 INFO ipython import frappe
+from frappe.permissions import add_permission, update_permission_property
+
+# 1. Ensure Roles are assigned to users
+users_roles = {
+    "manager@passport.local": "Passport Manager",
+    "admin_user@passport.local": "Passport Administrator"
+}
+
+for email, role in users_roles.items():
+    if frappe.db.exists("User", email):
+        u = frappe.get_doc("User", email)
+        assigned = [r.role for r in u.roles]
+        if role not in assigned:
+            u.append("roles", {"role": role})
+            u.save(ignore_permissions=True)
+
+# 2. Grant explicit Submit and Write permissions to Admin & Manager
+for role in ["Passport Manager", "Passport Administrator"]:
+    try:
+        add_permission("Passport Application", role, 0)
+    except Exception:
+        pass
+    update_permission_property("Passport Application", role, 0, "read", 1)
+    update_permission_property("Passport Application", role, 0, "write", 1)
+
+# Critical: Administrator MUST have 'submit' permission to move to doc_status 1
+update_permission_property("Passport Application", "Passport Administrator", 0, "submit", 1)
+
+# 3. Clean Re-sync of Workflow States and Transitions
+wf_name = "Passport Approval Workflow"
+if frappe.db.exists("Workflow", wf_name):
+    frappe.delete_doc("Workflow", wf_name, ignore_permissions=True)
+
+wf = frappe.new_doc("Workflow")
+wf.workflow_name = wf_name
+wf.document_type = "Passport Application"
+wf.workflow_state_field = "workflow_state"
+wf.is_active = 1
+
+# States: Allow Edit must match who holds the document at that state
+wf.append("states", {"state": "Draft", "doc_status": 0, "allow_edit": "Passport Data Entry Clerk"})
+wf.append("states", {"state": "Pending Manager Review", "doc_status": 0, "allow_edit": "Passport Manager"})
+wf.append("states", {"state": "Pending Admin Authorization", "doc_status": 0, "allow_edit": "Passport Administrator"})
+wf.append("states", {"state": "Issued / Ready to Print", "doc_status": 1, "allow_edit": "Passport Administrator"})
+wf.append("states", {"state": "Rejected", "doc_status": 2, "allow_edit": "Passport Administrator"})
+
+# Transitions
+transitions = [
+    {
+        "state": "Draft",
+        "action": "Submit for Verification",
+        "next_state": "Pending Manager Review",
+        "allowed": "Passport Data Entry Clerk"
+    },
+    {
+        "state": "Pending Manager Review",
+        "action": "Approve",
+        "next_state": "Pending Admin Authorization",
+        "allowed": "Passport Manager"
+    },
+    {
+        "state": "Pending Manager Review",
+        "action": "Send Back for Correction",
+        "next_state": "Draft",
+        "allowed": "Passport Manager"
+    },
+    {
+        "state": "Pending Admin Authorization",
+        "action": "Final Authorize & Issue",
+        "next_state": "Issued / Ready to Print",
+        "allowed": "Passport Administrator"
+    },
+    {
+        "state": "Pending Admin Authorization",
+        "action": "Reject",
+        "next_state": "Draft",
+        "allowed": "Passport Administrator"
+    }
+]
+
+for t in transitions:
+    wf.append("transitions", t)
+
+wf.insert(ignore_permissions=True)
+frappe.db.commit()
+
+print(">>> [SUCCESS] Roles, permissions, and workflow transitions completely synchronized!")
+exit()
+2026-09-29 11:08:21,449 INFO ipython === session end ===
+2026-09-29 11:08:39,499 INFO ipython === bench console session ===
+2026-09-29 11:08:39,499 INFO ipython import frappe
+
+# Get the latest application record
+doc = frappe.get_last_doc("Passport Application")
+
+# Set it directly to Pending Admin Authorization
+doc.workflow_state = "Pending Admin Authorization"
+doc.save(ignore_permissions=True)
+frappe.db.commit()
+
+print(f">>> Document {doc.name} is now set to 'Pending Admin Authorization'")
+exit()
+2026-09-29 11:08:39,499 INFO ipython === session end ===
+2026-09-29 12:02:31,410 INFO ipython === bench console session ===
+2026-09-29 12:02:31,410 INFO ipython import frappe
+from frappe.utils.password import update_password
+
+email = "clerk@passport.local"
+
+# 1. Fetch user or create if somehow missing
+if not frappe.db.exists("User", email):
+    user = frappe.new_doc("User")
+    user.email = email
+    user.first_name = "Clerk"
+    user.save(ignore_permissions=True)
+else:
+    user = frappe.get_doc("User", email)
+
+# 2. Ensure account is fully active and is a Desk user
+user.enabled = 1
+user.user_type = "System User"
+user.send_welcome_email = 0
+
+# 3. Ensure essential roles exist on user
+roles = ["Passport Data Entry Clerk", "Desk User", "Employee"]
+for r in roles:
+    if frappe.db.exists("Role", r) and not any(ur.role == r for ur in user.roles):
+        user.append("roles", {"role": r})
+
+user.save(ignore_permissions=True)
+
+# 4. Directly update password in the __Auth table
+update_password(user=email, pwd="admin")
+
+# 5. Clear any login locks / failed attempts
+frappe.db.delete("Activity Log", {"user": email})
+frappe.cache.delete_value(f"login_failed_count:{email}")
+
+frappe.db.commit()
+print(">>> [SUCCESS] Clerk account unlocked, verified as System User, and password set to 'admin'!")
+exit()
+2026-09-29 12:02:31,410 INFO ipython import frappe
+from frappe.utils.password import update_password
+
+email = "clerk@passport.local"
+
+# 1. Fetch user or create if missing
+if not frappe.db.exists("User", email):
+    user = frappe.new_doc("User")
+    user.email = email
+    user.first_name = "Clerk"
+    user.save(ignore_permissions=True)
+else:
+    user = frappe.get_doc("User", email)
+
+# 2. Set account parameters
+user.enabled = 1
+user.user_type = "System User"
+user.send_welcome_email = 0
+
+# 3. Add roles using flat list check
+current_roles = [x.role for x in user.roles]
+target_roles = ["Passport Data Entry Clerk", "Desk User", "Employee"]
+
+for target in target_roles:
+    if frappe.db.exists("Role", target) and target not in current_roles:
+        user.append("roles", {"role": target})
+
+user.save(ignore_permissions=True)
+
+# 4. Set password directly
+update_password(user=email, pwd="admin")
+
+# 5. Flush any lockouts/blocks
+frappe.db.delete("Activity Log", {"user": email})
+frappe.cache.delete_value(f"login_failed_count:{email}")
+
+frappe.db.commit()
+print(">>> [SUCCESS] Clerk password updated to 'admin' and account ready!")
+exit()
+2026-09-29 12:02:31,410 INFO ipython === session end ===
+2026-09-29 12:04:17,113 INFO ipython === bench console session ===
+2026-09-29 12:04:17,114 INFO ipython import frappe
+
+user_email = "clerk@passport.local"
+
+# 1. Delete any auto-created Email Account for this user
+email_accounts = frappe.get_all("Email Account", filters={"email_id": user_email}, pluck="name")
+for acc in email_accounts:
+    frappe.delete_doc("Email Account", acc, force=True, ignore_permissions=True)
+    print(f"Removed Email Account: {acc}")
+
+# 2. Disable user inbox fetching/creation on the User document
+if frappe.db.exists("User", user_email):
+    user = frappe.get_doc("User", user_email)
+    # Clear thread notify / email creation triggers
+    if hasattr(user, "thread_notify"):
+        user.thread_notify = 0
+    user.save(ignore_permissions=True)
+
+# 3. Ensure custom docperm for Email Account allows read for clerk's role to prevent the crash
+role = "Passport Data Entry Clerk"
+if not frappe.db.exists("Custom DocPerm", {"parent": "Email Account", "role": role}):
+    perm = frappe.new_doc("Custom DocPerm")
+    perm.parent = "Email Account"
+    perm.parenttype = "DocType"
+    perm.parentfield = "permissions"
+    perm.role = role
+    perm.read = 1
+    perm.permlevel = 0
+    perm.insert(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [FIXED] User email account removed and boot prompt silenced!")
+exit()
+2026-09-29 12:04:17,114 INFO ipython === session end ===
+2026-09-29 12:08:19,045 INFO ipython === bench console session ===
+2026-09-29 12:08:19,046 INFO ipython import frappe
+
+# 1. Inspect the last document
+doc = frappe.get_last_doc("Passport Application")
+print(f"--> Target Document: {doc.name}")
+print(f"--> Current workflow_state: '{doc.workflow_state}'")
+print(f"--> Current docstatus: {doc.docstatus}")
+
+# 2. Reset document to Pending Manager Review
+doc.docstatus = 0
+doc.workflow_state = "Pending Manager Review"
+doc.save(ignore_permissions=True)
+frappe.db.commit()
+print("--> Reset document state to 'Pending Manager Review'.")
+
+# 3. Verify Manager user role
+user = frappe.get_doc("User", "manager@passport.local")
+user_roles = [r.role for r in user.roles]
+print(f"--> Manager roles: {user_roles}")
+
+if "Passport Manager" not in user_roles:
+    user.append("roles", {"role": "Passport Manager"})
+    user.save(ignore_permissions=True)
+    frappe.db.commit()
+    print("--> Assigned 'Passport Manager' role.")
+
+# 4. Check the Workflow transitions table
+wf = frappe.get_doc("Workflow", "Passport Approval Workflow")
+manager_transitions = [
+    t for t in wf.transitions 
+    if t.state == "Pending Manager Review" and t.allowed == "Passport Manager"
+]
+
+print(f"--> Manager transitions found: {[t.action for t in manager_transitions]}")
+
+if not any(t.action == "Approve" for t in manager_transitions):
+    wf.append("transitions", {
+        "state": "Pending Manager Review",
+        "action": "Approve",
+        "next_state": "Pending Admin Authorization",
+        "allowed": "Passport Manager"
+    })
+    wf.save(ignore_permissions=True)
+    frappe.db.commit()
+    print("--> Injected missing 'Approve' transition into workflow.")
+
+exit()
+2026-09-29 12:08:19,046 INFO ipython === session end ===
+2026-09-29 12:11:57,877 INFO ipython === bench console session ===
+2026-09-29 12:11:57,878 INFO ipython import frappe
+from frappe.permissions import add_permission, update_permission_property
+
+# ============================================================
+# 1. ENSURE USERS HAVE THEIR RESPECTIVE ROLES
+# ============================================================
+user_role_map = {
+    "clerk@passport.local": "Passport Data Entry Clerk",
+    "manager@passport.local": "Passport Manager",
+    "admin_user@passport.local": "Passport Administrator"
+}
+
+for email, role in user_role_map.items():
+    if frappe.db.exists("User", email):
+        u = frappe.get_doc("User", email)
+        assigned = [r.role for r in u.roles]
+        if role not in assigned:
+            u.append("roles", {"role": role})
+            u.save(ignore_permissions=True)
+            print(f">>> Added role '{role}' to {email}")
+
+# ============================================================
+# 2. ENSURE ALL WORKFLOW ACTION MASTERS EXIST
+# ============================================================
+actions = [
+    "Submit for Verification",
+    "Approve",
+    "Send Back for Correction",
+    "Final Authorize & Issue",
+    "Reject"
+]
+
+for act in actions:
+    if not frappe.db.exists("Workflow Action Master", act):
+        a = frappe.new_doc("Workflow Action Master")
+        a.workflow_action_name = act
+        a.insert(ignore_permissions=True)
+
+# ============================================================
+# 3. ENSURE ALL WORKFLOW STATES EXIST
+# ============================================================
+states_info = [
+    ("Draft", 0),
+    ("Pending Manager Review", 0),
+    ("Pending Admin Authorization", 0),
+    ("Issued / Ready to Print", 1),
+    ("Rejected", 2)
+]
+
+for state_name, doc_status in states_info:
+    if not frappe.db.exists("Workflow State", state_name):
+        ws = frappe.new_doc("Workflow State")
+        ws.workflow_state_name = state_name
+        ws.insert(ignore_permissions=True)
+
+# ============================================================
+# 4. RECREATE WORKFLOW WITH PROPER EDIT & TRANSITION RULES
+# ============================================================
+wf_name = "Passport Approval Workflow"
+if frappe.db.exists("Workflow", wf_name):
+    frappe.delete_doc("Workflow", wf_name, ignore_permissions=True)
+
+wf = frappe.new_doc("Workflow")
+wf.workflow_name = wf_name
+wf.document_type = "Passport Application"
+wf.workflow_state_field = "workflow_state"
+wf.is_active = 1
+# Don't override status so doc_status transitions operate smoothly
+wf.dont_override_status = 0
+
+# States Table:
+# Allow edit MUST include the role executing transitions in that state
+wf.append("states", {"state": "Draft", "doc_status": 0, "allow_edit": "Passport Data Entry Clerk"})
+wf.append("states", {"state": "Pending Manager Review", "doc_status": 0, "allow_edit": "Passport Manager"})
+wf.append("states", {"state": "Pending Admin Authorization", "doc_status": 0, "allow_edit": "Passport Administrator"})
+wf.append("states", {"state": "Issued / Ready to Print", "doc_status": 1, "allow_edit": "Passport Administrator"})
+wf.append("states", {"state": "Rejected", "doc_status": 2, "allow_edit": "Passport Administrator"})
+
+# Transitions Table:
+wf.append("transitions", {
+    "state": "Draft",
+    "action": "Submit for Verification",
+    "next_state": "Pending Manager Review",
+    "allowed": "Passport Data Entry Clerk"
+})
+wf.append("transitions", {
+    "state": "Pending Manager Review",
+    "action": "Approve",
+    "next_state": "Pending Admin Authorization",
+    "allowed": "Passport Manager"
+})
+wf.append("transitions", {
+    "state": "Pending Manager Review",
+    "action": "Send Back for Correction",
+    "next_state": "Draft",
+    "allowed": "Passport Manager"
+})
+wf.append("transitions", {
+    "state": "Pending Admin Authorization",
+    "action": "Final Authorize & Issue",
+    "next_state": "Issued / Ready to Print",
+    "allowed": "Passport Administrator"
+})
+wf.append("transitions", {
+    "state": "Pending Admin Authorization",
+    "action": "Reject",
+    "next_state": "Draft",
+    "allowed": "Passport Administrator"
+})
+
+wf.insert(ignore_permissions=True)
+
+# ============================================================
+# 5. RE-ALIGN ALL EXISTING PASSPORT APPLICATION DOCUMENTS
+# ============================================================
+applications = frappe.get_all("Passport Application", fields=["name", "workflow_state", "docstatus"])
+for app in applications:
+    d = frappe.get_doc("Passport Application", app.name)
+    # If state is missing or corrupted, normalize it
+    if not d.workflow_state or d.workflow_state not in [s[0] for s in states_info]:
+        d.workflow_state = "Pending Manager Review"
+        d.docstatus = 0
+        d.save(ignore_permissions=True)
+        print(f">>> Reset document {d.name} state to 'Pending Manager Review'")
+
+frappe.db.commit()
+print(">>> [SUCCESS] Workflow, transitions, and documents fully aligned!")
+exit()
+2026-09-29 12:11:57,878 INFO ipython === session end ===
+2026-09-29 13:36:02,016 INFO ipython === bench console session ===
+2026-09-29 13:36:02,016 INFO ipython import frappe
+
+doctype_name = "Passport Application"
+doc = frappe.get_doc("DocType", doctype_name)
+
+# 1. Define fields to append at the bottom of the form
+fields_to_add = [
+    {
+        "fieldname": "section_workflow_actions",
+        "label": "إجراءات الاعتماد / Workflow Operations",
+        "fieldtype": "Section Break",
+        "insert_after": "mrz_data"
+    },
+    {
+        "fieldname": "btn_clerk_submit",
+        "label": "إرسال للتدقيق (Submit for Verification)",
+        "fieldtype": "Button",
+        "insert_after": "section_workflow_actions"
+    },
+    {
+        "fieldname": "btn_manager_approve",
+        "label": "موافقة (Approve)",
+        "fieldtype": "Button",
+        "insert_after": "btn_clerk_submit"
+    },
+    {
+        "fieldname": "btn_manager_send_back",
+        "label": "إرجاع للتعديل (Send Back)",
+        "fieldtype": "Button",
+        "insert_after": "btn_manager_approve"
+    },
+    {
+        "fieldname": "btn_admin_issue",
+        "label": "تخويل وإصدار نهائي (Authorize & Issue)",
+        "fieldtype": "Button",
+        "insert_after": "btn_manager_send_back"
+    },
+    {
+        "fieldname": "btn_print_booklet",
+        "label": "طباعة دفتر الجواز (Print Booklet)",
+        "fieldtype": "Button",
+        "insert_after": "btn_admin_issue"
+    }
+]
+
+existing_fieldnames = [f.fieldname for f in doc.fields]
+for field_def in fields_to_add:
+    if field_def["fieldname"] not in existing_fieldnames:
+        doc.append("fields", field_def)
+        print(f">>> Added field: {field_def['fieldname']}")
+
+doc.save(ignore_permissions=True)
+
+# 2. Add / Update Client Script to handle button clicks & visibility
+client_script_code = """
+frappe.ui.form.on('Passport Application', {
+    refresh(frm) {
+        if (frm.is_new()) {
+            frm.toggle_display('section_workflow_actions', false);
+            return;
+        }
+
+        frm.toggle_display('section_workflow_actions', true);
+        const state = frm.doc.workflow_state || 'Draft';
+        const roles = frappe.user_roles;
+
+        // Toggle button visibility based on workflow state & role
+        const is_clerk = roles.includes('Passport Data Entry Clerk') || roles.includes('System Manager');
+        const is_manager = roles.includes('Passport Manager') || roles.includes('System Manager');
+        const is_admin = roles.includes('Passport Administrator') || roles.includes('System Manager');
+
+        frm.toggle_display('btn_clerk_submit', state === 'Draft' && is_clerk);
+        frm.toggle_display('btn_manager_approve', state === 'Pending Manager Review' && is_manager);
+        frm.toggle_display('btn_manager_send_back', state === 'Pending Manager Review' && is_manager);
+        frm.toggle_display('btn_admin_issue', state === 'Pending Admin Authorization' && is_admin);
+        frm.toggle_display('btn_print_booklet', state === 'Issued / Ready to Print' || frm.doc.docstatus === 1);
+    },
+
+    btn_clerk_submit(frm) {
+        apply_action(frm, 'Submit for Verification');
+    },
+
+    btn_manager_approve(frm) {
+        apply_action(frm, 'Approve');
+    },
+
+    btn_manager_send_back(frm) {
+        apply_action(frm, 'Send Back for Correction');
+    },
+
+    btn_admin_issue(frm) {
+        apply_action(frm, 'Final Authorize & Issue');
+    },
+
+    btn_print_booklet(frm) {
+        const url = frappe.urllib.get_full_url(
+            `/printview?doctype=Passport%20Application&name=${encodeURIComponent(frm.doc.name)}&format=Passport%20TD3%20Booklet%20Page&no_letterhead=1`
+        );
+        window.open(url, '_blank');
+    }
+});
+
+function apply_action(frm, action_name) {
+    frappe.confirm(`هل أنت متأكد من تنفيذ الإجراء: "${action_name}"؟`, () => {
+        frappe.xcall('frappe.model.workflow.apply_workflow', {
+            doc: frm.doc,
+            action: action_name
+        }).then(() => {
+            frm.reload_doc();
+        });
+    });
+}
+"""
+
+script_name = "Passport Application Action Buttons"
+if frappe.db.exists("Client Script", script_name):
+    cs = frappe.get_doc("Client Script", script_name)
+else:
+    cs = frappe.new_doc("Client Script")
+    cs.name = script_name
+
+cs.dt = doctype_name
+cs.script = client_script_code
+cs.enabled = 1
+cs.save(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Buttons and client script added successfully via CLI!")
+exit()
+2026-09-29 13:36:02,016 INFO ipython === session end ===
+2026-09-29 13:53:22,424 INFO ipython === bench console session ===
+2026-09-29 13:53:22,424 INFO ipython import frappe
+
+format_name = "Passport TD3 Booklet Page"
+
+html_content = """
+<style>
+@page {
+    size: 125mm 88mm;
+    margin: 0;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 125mm;
+    height: 88mm;
+    background: #e9f2eb;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #1a202c;
+    -webkit-print-color-adjust: exact;
+}
+
+.passport-card {
+    position: relative;
+    width: 125mm;
+    height: 88mm;
+    box-sizing: border-box;
+    padding: 3mm 5mm 2mm 5mm;
+    background: linear-gradient(135deg, #f2f7f4 0%, #dbeee2 50%, #eff7f2 100%);
+    overflow: hidden;
+}
+
+/* Subtle guilloche security pattern imitation */
+.passport-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 60% 45%, rgba(180, 215, 195, 0.45) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.content-layer {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Header */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.8px solid #4a7c59;
+    padding-bottom: 1.5mm;
+}
+.header-left {
+    text-align: left;
+}
+.header-left .title-en {
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #14532d;
+    text-transform: uppercase;
+}
+.header-left .sub-en {
+    font-size: 6pt;
+    font-weight: 600;
+    color: #4b5563;
+}
+.header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.flag-emblem {
+    width: 16px;
+    height: 10px;
+    background: linear-gradient(to bottom, #ce1126 33%, #fff 33%, #fff 66%, #000 66%);
+    border: 0.5px solid #666;
+    border-radius: 1px;
+}
+.header-right {
+    text-align: right;
+    direction: rtl;
+}
+.header-right .title-ar {
+    font-size: 7.5pt;
+    font-weight: bold;
+    color: #14532d;
+    line-height: 1.1;
+}
+.header-right .sub-ar {
+    font-size: 5.5pt;
+    color: #4b5563;
+}
+
+/* Meta Line */
+.meta-bar {
+    display: flex;
+    justify-content: space-between;
+    font-size: 5.5pt;
+    margin-top: 1mm;
+    margin-bottom: 1.5mm;
+    padding: 0 1mm;
+}
+.meta-item {
+    display: flex;
+    gap: 3px;
+    align-items: baseline;
+}
+.meta-label {
+    color: #374151;
+    font-weight: 600;
+}
+.meta-val {
+    font-weight: 800;
+    font-size: 6.5pt;
+}
+.meta-val-red {
+    color: #b91c1c;
+    font-weight: 800;
+    font-size: 7.5pt;
+    letter-spacing: 0.5px;
+}
+
+/* Main Body */
+.main-body {
+    display: flex;
+    flex-direction: row;
+    height: 54mm;
+}
+
+/* Left Photo Area */
+.photo-col {
+    width: 33mm;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.photo-frame {
+    width: 31mm;
+    height: 41mm;
+    border: 0.8px solid #94a3b8;
+    background: #e2e8f0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.ghost-photo {
+    width: 13mm;
+    height: 16mm;
+    opacity: 0.35;
+    margin-top: 1mm;
+    border: 0.5px dashed #64748b;
+    overflow: hidden;
+}
+.ghost-photo img {
+    width: 100%;
+    height: 100%;
+    filter: grayscale(100%);
+    object-fit: cover;
+}
+
+/* Center Fields Grid */
+.fields-col {
+    flex-grow: 1;
+    padding-left: 3mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.data-group {
+    margin-bottom: 0.9mm;
+}
+.lbl {
+    font-size: 4.8pt;
+    color: #334155;
+    font-weight: 700;
+    line-height: 1;
+    display: flex;
+    justify-content: space-between;
+}
+.val {
+    font-size: 7pt;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.two-col-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 3mm;
+}
+.two-col-row > div {
+    flex: 1;
+}
+
+.signature-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5mm;
+}
+.signature-img {
+    max-height: 8mm;
+    max-width: 28mm;
+}
+
+/* Bottom MRZ */
+.mrz-box {
+    margin-top: 1mm;
+    padding-top: 1mm;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 9.3pt;
+    line-height: 1.12;
+    letter-spacing: 1.7px;
+    font-weight: 700;
+    white-space: pre;
+    color: #000;
+    text-transform: uppercase;
+}
+</style>
+
+<div class="passport-card">
+    <div class="content-layer">
+        <!-- Header -->
+        <div>
+            <div class="top-header">
+                <div class="header-left">
+                    <div class="title-en">Republic of Iraq</div>
+                    <div class="sub-en">Passport</div>
+                </div>
+                <div class="header-center">
+                    <div class="flag-emblem"></div>
+                </div>
+                <div class="header-right">
+                    <div class="title-ar">جمهورية العراق / كۆماری عێراق</div>
+                    <div class="sub-ar">جواز سفر / پاسپۆرت</div>
+                </div>
+            </div>
+
+            <!-- Meta Line -->
+            <div class="meta-bar">
+                <div class="meta-item">
+                    <span class="meta-label">Type/جۆر/الفئة:</span>
+                    <span class="meta-val">P</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Country Code/كۆدی وڵات/رمز الدولة:</span>
+                    <span class="meta-val">IRQ</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Passport No./ژمارەی پاسپۆرت/رقم الجواز:</span>
+                    <span class="meta-val-red">{{ doc.passport_number or '-------' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="main-body">
+            <!-- Left Photo Column -->
+            <div class="photo-col">
+                <div class="photo-frame">
+                    {% if doc.applicant_photo %}
+                        <img src="{{ doc.applicant_photo }}">
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Fields Column -->
+            <div class="fields-col">
+                <div class="data-group">
+                    <div class="lbl">
+                        <span>Full Name / ناوی سیانی</span>
+                        <span>الاسم الكامل</span>
+                    </div>
+                    <div class="val">{{ (doc.first_name or '').upper() }} {{ (doc.father_name or '').upper() }} {{ (doc.grandfather_name or '').upper() }}</div>
+                </div>
+
+                <div class="data-group">
+                    <div class="lbl">
+                        <span>Surname / نازناو</span>
+                        <span>اللقب</span>
+                    </div>
+                    <div class="val">{{ (doc.family_name or '').upper() }}</div>
+                </div>
+
+                <div class="two-col-row">
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Date of Birth / ڕێکەوتی لەدایکبوون</span>
+                            <span>تاريخ الولادة</span>
+                        </div>
+                        <div class="val">{{ frappe.utils.formatdate(doc.date_of_birth, "dd.MM.yyyy") if doc.date_of_birth else '---' }}</div>
+                    </div>
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Nationality / هاووڵاتیبوون</span>
+                            <span>الجنسية</span>
+                        </div>
+                        <div class="val">IRAQI / عراقي</div>
+                    </div>
+                    <div class="data-group" style="max-width: 14mm;">
+                        <div class="lbl">
+                            <span>Sex / ڕەگەز</span>
+                            <span>الجنس</span>
+                        </div>
+                        <div class="val">{{ (doc.gender or '')[:1].upper() }}</div>
+                    </div>
+                </div>
+
+                <div class="two-col-row">
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Place of Birth / شوێنی لەدایکبوون</span>
+                            <span>محل الولادة</span>
+                        </div>
+                        <div class="val">{{ (doc.place_of_birth or 'BAGHDAD').upper() }}</div>
+                    </div>
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>National ID / الرقم الوطني</span>
+                            <span>رقم البطاقة</span>
+                        </div>
+                        <div class="val">{{ doc.national_id or '---' }}</div>
+                    </div>
+                </div>
+
+                <div class="two-col-row">
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Date of Issue / ڕێکەوتی دەرچوون</span>
+                            <span>تاريخ الإصدار</span>
+                        </div>
+                        <div class="val">{{ frappe.utils.formatdate(doc.issue_date, "dd.MM.yyyy") if doc.issue_date else '---' }}</div>
+                    </div>
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Date of Expiry / ڕێکەوتی بەسەرچوون</span>
+                            <span>تاريخ الانتهاء</span>
+                        </div>
+                        <div class="val">{{ frappe.utils.formatdate(doc.expiry_date, "dd.MM.yyyy") if doc.expiry_date else '---' }}</div>
+                    </div>
+                </div>
+
+                <div class="two-col-row">
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Issuing Authority / دەسەڵاتی دەرچوواندن</span>
+                            <span>جهة الإصدار</span>
+                        </div>
+                        <div class="val">BAGHDAD</div>
+                    </div>
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Holder's Signature / توقيع صاحب الجواز</span>
+                        </div>
+                        <div class="signature-row">
+                            {% if doc.applicant_signature %}
+                                <img class="signature-img" src="{{ doc.applicant_signature }}">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ICAO MRZ -->
+        <div class="mrz-box">{{ doc.mrz_data or '' }}</div>
+    </div>
+</div>
+"""
+
+pf = frappe.get_doc("Print Format", format_name)
+pf.html = html_content
+pf.save(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Iraqi B-Series Passport layout successfully injected!")
+exit()
+2026-09-29 13:53:22,424 INFO ipython === session end ===
+2026-09-29 14:00:11,041 INFO ipython === bench console session ===
+2026-09-29 14:00:11,041 INFO ipython cd ~/frappe/frappe-bench
+bench --site passport.local console
+2026-09-29 14:00:11,041 INFO ipython import frappe
+
+format_name = "Passport TD3 Booklet Page"
+
+html_content = """
+<style>
+/* 1. Force exact page boundary for PDF engine and browser print */
+@page {
+    size: 125mm 88mm !important;
+    margin: 0mm !important;
+}
+
+/* 2. Override Frappe Desk's default A4 paper preview styles */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 125mm !important;
+    height: 88mm !important;
+    background: transparent !important;
+    -webkit-print-color-adjust: exact;
+}
+
+.print-format {
+    width: 125mm !important;
+    max-width: 125mm !important;
+    min-width: 125mm !important;
+    height: 88mm !important;
+    max-height: 88mm !important;
+    min-height: 88mm !important;
+    padding: 0px !important;
+    margin: 0px auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.page-break {
+    display: none !important;
+}
+
+/* 3. Outer Passport Card Container */
+.passport-card {
+    position: relative;
+    width: 125mm;
+    height: 88mm;
+    box-sizing: border-box;
+    padding: 3mm 5mm 2mm 5mm;
+    background: linear-gradient(135deg, #f2f7f4 0%, #dbeee2 50%, #eff7f2 100%);
+    overflow: hidden;
+    border-radius: 4px;
+    border: 0.5px solid #cbd5e1;
+}
+
+.passport-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 60% 45%, rgba(180, 215, 195, 0.45) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.content-layer {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Top Header */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.8px solid #4a7c59;
+    padding-bottom: 1.2mm;
+}
+.header-left {
+    text-align: left;
+}
+.header-left .title-en {
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #14532d;
+    text-transform: uppercase;
+}
+.header-left .sub-en {
+    font-size: 6pt;
+    font-weight: 600;
+    color: #4b5563;
+}
+.header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.flag-emblem {
+    width: 16px;
+    height: 10px;
+    background: linear-gradient(to bottom, #ce1126 33%, #fff 33%, #fff 66%, #000 66%);
+    border: 0.5px solid #666;
+    border-radius: 1px;
+}
+.header-right {
+    text-align: right;
+    direction: rtl;
+}
+.header-right .title-ar {
+    font-size: 7.5pt;
+    font-weight: bold;
+    color: #14532d;
+    line-height: 1.1;
+}
+.header-right .sub-ar {
+    font-size: 5.5pt;
+    color: #4b5563;
+}
+
+/* Meta Bar */
+.meta-bar {
+    display: flex;
+    justify-content: space-between;
+    font-size: 5.2pt;
+    margin-top: 1mm;
+    margin-bottom: 1.2mm;
+    padding: 0 1mm;
+}
+.meta-item {
+    display: flex;
+    gap: 3px;
+    align-items: baseline;
+}
+.meta-label {
+    color: #374151;
+    font-weight: 600;
+}
+.meta-val {
+    font-weight: 800;
+    font-size: 6.5pt;
+}
+.meta-val-red {
+    color: #b91c1c;
+    font-weight: 800;
+    font-size: 7.5pt;
+    letter-spacing: 0.5px;
+}
+
+/* Main Body Layout */
+.main-body {
+    display: flex;
+    flex-direction: row;
+    height: 53mm;
+}
+
+/* Photo Column */
+.photo-col {
+    width: 32mm;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.photo-frame {
+    width: 30mm;
+    height: 40mm;
+    border: 0.8px solid #94a3b8;
+    background: #e2e8f0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Fields Grid */
+.fields-col {
+    flex-grow: 1;
+    padding-left: 3mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.data-group {
+    margin-bottom: 0.8mm;
+}
+.lbl {
+    font-size: 4.8pt;
+    color: #334155;
+    font-weight: 700;
+    line-height: 1;
+    display: flex;
+    justify-content: space-between;
+}
+.val {
+    font-size: 6.8pt;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.two-col-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 2.5mm;
+}
+.two-col-row > div {
+    flex: 1;
+}
+
+.signature-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5mm;
+}
+.signature-img {
+    max-height: 8mm;
+    max-width: 28mm;
+}
+
+/* MRZ Section */
+.mrz-box {
+    margin-top: 0.5mm;
+    padding-top: 0.5mm;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 9.3pt;
+    line-height: 1.12;
+    letter-spacing: 1.7px;
+    font-weight: 700;
+    white-space: pre;
+    color: #000;
+    text-transform: uppercase;
+}
+</style>
+
+<div class="passport-card">
+    <div class="content-layer">
+        <!-- Top Header -->
+        <div>
+            <div class="top-header">
+                <div class="header-left">
+                    <div class="title-en">Republic of Iraq</div>
+                    <div class="sub-en">Passport</div>
+                </div>
+                <div class="header-center">
+                    <div class="flag-emblem"></div>
+                </div>
+                <div class="header-right">
+                    <div class="title-ar">جمهورية العراق / كۆماری عێراق</div>
+                    <div class="sub-ar">جواز سفر / پاسپۆرت</div>
+                </div>
+            </div>
+
+            <!-- Meta Information Bar -->
+            <div class="meta-bar">
+                <div class="meta-item">
+                    <span class="meta-label">Type/جۆر/الفئة:</span>
+                    <span class="meta-val">P</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Country Code/كۆدی وڵات/رمز الدولة:</span>
+                    <span class="meta-val">IRQ</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Passport No./ژمارەی پاسپۆرت/رقم الجواز:</span>
+                    <span class="meta-val-red">{{ doc.passport_number or '-------' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Body -->
+        <div class="main-body">
+            <div class="photo-col">
+                <div class="photo-frame">
+                    {% if doc.applicant_photo %}
+                        <img src="{{ doc.applicant_photo }}">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="fields-col">
+                <div class="data-group">
+                    <div class="lbl">
+                        <span>Full Name / ناوی سیانی</span>
+                        <span>الاسم الكامل</span>
+                    </div>
+                    <div class="val">{{ (doc.first_name or '').upper() }} {{ (doc.father_name or '').upper() }} {{ (doc.grandfather_name or '').upper() }}</div>
+                </div>
+
+                <div class="data-group">
+                    <div class="lbl">
+                        <span>Surname / نازناو</span>
+                        <span>اللقب</span>
+                    </div>
+                    <div class="val">{{ (doc.family_name or '').upper() }}</div>
+                </div>
+
+                <div class="two-col-row">
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Date of Birth / ڕێکەوتی لەدایکبوون</span>
+                            <span>تاريخ الولادة</span>
+                        </div>
+                        <div class="val">{{ frappe.utils.formatdate(doc.date_of_birth, "dd.MM.yyyy") if doc.date_of_birth else '---' }}</div>
+                    </div>
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Nationality / هاووڵاتیبوون</span>
+                            <span>الجنسية</span>
+                        </div>
+                        <div class="val">IRAQI / عراقي</div>
+                    </div>
+                    <div class="data-group" style="max-width: 14mm;">
+                        <div class="lbl">
+                            <span>Sex / ڕەگەز</span>
+                            <span>الجنس</span>
+                        </div>
+                        <div class="val">{{ (doc.gender or '')[:1].upper() }}</div>
+                    </div>
+                </div>
+
+                <div class="two-col-row">
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Place of Birth / شوێنی لەدایکبوون</span>
+                            <span>محل الولادة</span>
+                        </div>
+                        <div class="val">{{ (doc.place_of_birth or 'BAGHDAD').upper() }}</div>
+                    </div>
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>National ID / الرقم الوطني</span>
+                            <span>رقم البطاقة</span>
+                        </div>
+                        <div class="val">{{ doc.national_id or '---' }}</div>
+                    </div>
+                </div>
+
+                <div class="two-col-row">
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Date of Issue / ڕێکەوتی دەرچوون</span>
+                            <span>تاريخ الإصدار</span>
+                        </div>
+                        <div class="val">{{ frappe.utils.formatdate(doc.issue_date, "dd.MM.yyyy") if doc.issue_date else '---' }}</div>
+                    </div>
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Date of Expiry / ڕێکەوتی بەسەرچوون</span>
+                            <span>تاريخ الانتهاء</span>
+                        </div>
+                        <div class="val">{{ frappe.utils.formatdate(doc.expiry_date, "dd.MM.yyyy") if doc.expiry_date else '---' }}</div>
+                    </div>
+                </div>
+
+                <div class="two-col-row">
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Issuing Authority / دەسەڵاتی دەرچوواندن</span>
+                            <span>جهة الإصدار</span>
+                        </div>
+                        <div class="val">BAGHDAD</div>
+                    </div>
+                    <div class="data-group">
+                        <div class="lbl">
+                            <span>Holder's Signature / توقيع صاحب الجواز</span>
+                        </div>
+                        <div class="signature-row">
+                            {% if doc.applicant_signature %}
+                                <img class="signature-img" src="{{ doc.applicant_signature }}">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Machine Readable Zone (MRZ) -->
+        <div class="mrz-box">{{ doc.mrz_data or '' }}</div>
+    </div>
+</div>
+"""
+
+pf = frappe.get_doc("Print Format", format_name)
+pf.html = html_content
+pf.save(ignore_permissions=True)
+frappe.db.commit()
+
+print(">>> [SUCCESS] Exact 125mm x 88mm booklet container rules applied!")
+exit()
+2026-09-29 14:00:11,041 INFO ipython === session end ===
+2026-09-29 16:48:20,444 INFO ipython === bench console session ===
+2026-09-29 16:48:20,444 INFO ipython import frappe
+
+# 1. Bypass and complete setup wizard state
+frappe.db.set_single_value("System Settings", "setup_complete", 1)
+
+# 2. Ensure all core roles are assigned to Administrator
+admin = frappe.get_doc("User", "Administrator")
+admin.enabled = 1
+for r in ["System Manager", "Passport Administrator"]:
+    if not any(ur.role == r for ur in admin.roles):
+        admin.append("roles", {"role": r})
+admin.save(ignore_permissions=True)
+
+# 3. Grant Setup Wizard page permission to System Manager just in case
+if frappe.db.exists("Page", "setup-wizard"):
+    p = frappe.get_doc("Page", "setup-wizard")
+    roles = [pr.role for pr in p.roles]
+    if "System Manager" not in roles:
+        p.append("roles", {"role": "System Manager"})
+        p.save(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Setup wizard marked complete and permissions restored!")
+exit()
+2026-09-29 16:48:20,444 INFO ipython (base) al_kufi@AlKufis-MacBook-Air frappe-bench %  source /Users/al_kufi/frappe/frappe-bench/env/bin/activate
+(env) (base) al_kufi@AlKufis-MacBook-Air frappe-bench % cd ~/frappe/frappe-bench
+bench --site passport.local console
+Apps in this namespace:
+frappe, passport_system, erpnext
+
+In [1]: import frappe
+   ...: 
+   ...: # 1. Bypass and complete setup wizard state
+   ...: frappe.db.set_single_value("System Settings", "setup_complete", 1)
+   ...: 
+   ...: # 2. Ensure all core roles are assigned to Administrator
+   ...: admin = frappe.get_doc("User", "Administrator")
+   ...: admin.enabled = 1
+   ...: for r in ["System Manager", "Passport Administrator"]:
+   ...:     if not any(ur.role == r for ur in admin.roles):
+   ...:         admin.append("roles", {"role": r})
+   ...: admin.save(ignore_permissions=True)
+   ...: 
+   ...: # 3. Grant Setup Wizard page permission to System Manager just in case
+   ...: if frappe.db.exists("Page", "setup-wizard"):
+   ...:     p = frappe.get_doc("Page", "setup-wizard")
+   ...:     roles = [pr.role for pr in p.roles]
+   ...:     if "System Manager" not in roles:
+   ...:         p.append("roles", {"role": "System Manager"})
+   ...:         p.save(ignore_permissions=True)
+   ...: 
+   ...: frappe.db.commit()
+   ...: print(">>> [SUCCESS] Setup wizard marked complete and permissions restored!")
+   ...: exit()
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Cell In[1], line 10
+      8 admin.enabled = 1
+      9 for r in ["System Manager", "Passport Administrator"]:
+---> 10     if not any(ur.role == r for ur in admin.roles):
+     11         admin.append("roles", {"role": r})
+     12 admin.save(ignore_permissions=True)
+
+Cell In[1], line 10, in <genexpr>(.0)
+      8 admin.enabled = 1
+      9 for r in ["System Manager", "Passport Administrator"]:
+---> 10     if not any(ur.role == r for ur in admin.roles):
+     11         admin.append("roles", {"role": r})
+     12 admin.save(ignore_permissions=True)
+
+NameError: name 'r' is not defined
+
+In [2]: 
+    
+2026-09-29 16:48:20,444 INFO ipython import frappe
+
+# 1. Bypass and mark setup wizard complete
+frappe.db.set_single_value("System Settings", "setup_complete", 1)
+
+# 2. Ensure roles on Administrator using a pre-extracted list
+admin = frappe.get_doc("User", "Administrator")
+admin.enabled = 1
+existing_roles = [ur.role for ur in admin.roles]
+
+for role_name in ["System Manager", "Passport Administrator"]:
+    if role_name not in existing_roles:
+        admin.append("roles", {"role": role_name})
+
+admin.save(ignore_permissions=True)
+
+# 3. Grant Setup Wizard page permission if present
+if frappe.db.exists("Page", "setup-wizard"):
+    p = frappe.get_doc("Page", "setup-wizard")
+    page_roles = [pr.role for pr in p.roles]
+    if "System Manager" not in page_roles:
+        p.append("roles", {"role": "System Manager"})
+        p.save(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Setup wizard marked complete and permissions restored!")
+exit()
+2026-09-29 16:48:20,444 INFO ipython === session end ===
+2026-09-29 16:53:52,425 INFO ipython === bench console session ===
+2026-09-29 16:53:52,426 INFO ipython import frappe
+
+# 1. Set default desk landing page/route to Passport Application list
+route = "app/passport-application"
+frappe.db.set_single_value("System Settings", "default_app", "passport_system")
+frappe.db.set_single_value("Website Settings", "home_page", route)
+
+# 2. Update Role Profiles / Workspace default route for passport users
+roles = [
+    "Passport Data Entry Clerk",
+    "Passport Manager",
+    "Passport Administrator"
+]
+
+for r in roles:
+    if frappe.db.exists("Role", r):
+        # Ensure they are routed straight to Passport Application
+        frappe.db.set_value("Role", r, "desk_access", 1)
+
+# 3. Create or ensure a dedicated "Passport System" Workspace is pinned as primary
+ws_name = "Passport System"
+if not frappe.db.exists("Workspace", ws_name):
+    ws = frappe.new_doc("Workspace")
+    ws.label = ws_name
+    ws.title = ws_name
+    ws.icon = "custom-app"
+    ws.module = "Passport System"
+    ws.public = 1
+    ws.sequence_id = 1
+    for r in roles:
+        ws.append("roles", {"role": r})
+    ws.append("links", {
+        "label": "Passport Applications",
+        "type": "DocType",
+        "link_to": "Passport Application"
+    })
+    ws.insert(ignore_permissions=True)
+else:
+    ws = frappe.get_doc("Workspace", ws_name)
+    ws.sequence_id = 1
+    ws.public = 1
+    ws.save(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Passport system configured as default landing application!")
+exit()
+2026-09-29 16:53:52,426 INFO ipython import frappe
+
+# 1. Detect actual module name in DB or create it if missing
+module_name = "passport_system"
+if not frappe.db.exists("Module Def", module_name):
+    # check for title case
+    if frappe.db.exists("Module Def", "Passport System"):
+        module_name = "Passport System"
+    else:
+        m = frappe.new_doc("Module Def")
+        m.module_name = "passport_system"
+        m.app_name = "passport_system"
+        m.insert(ignore_permissions=True)
+        module_name = "passport_system"
+
+# 2. Set default application and home route
+route = "app/passport-application"
+frappe.db.set_single_value("System Settings", "default_app", "passport_system")
+frappe.db.set_single_value("Website Settings", "home_page", route)
+
+# 3. Create or update the Workspace
+ws_name = "Passport System"
+if frappe.db.exists("Workspace", ws_name):
+    frappe.delete_doc("Workspace", ws_name, ignore_permissions=True)
+
+ws = frappe.new_doc("Workspace")
+ws.label = ws_name
+ws.title = ws_name
+ws.icon = "custom-app"
+ws.module = module_name
+ws.public = 1
+ws.sequence_id = 1
+
+# Add standard roles
+target_roles = ["Passport Data Entry Clerk", "Passport Manager", "Passport Administrator", "System Manager"]
+for r in target_roles:
+    if frappe.db.exists("Role", r):
+        ws.append("roles", {"role": r})
+
+ws.append("links", {
+    "label": "Passport Applications",
+    "type": "DocType",
+    "link_to": "Passport Application"
+})
+
+ws.insert(ignore_permissions=True, ignore_links=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Passport system set as default workspace & app!")
+exit()
+2026-09-29 16:53:52,426 INFO ipython import frappe
+
+# 1. Resolve or create Module Def
+module_name = "passport_system"
+if not frappe.db.exists("Module Def", module_name):
+    m = frappe.new_doc("Module Def")
+    m.module_name = module_name
+    m.app_name = "passport_system"
+    m.insert(ignore_permissions=True)
+
+# 2. Set default landing page & system settings
+route = "app/passport-application"
+frappe.db.set_single_value("System Settings", "default_app", "passport_system")
+frappe.db.set_single_value("Website Settings", "home_page", route)
+
+# 3. Create or replace the Workspace
+ws_name = "Passport System"
+if frappe.db.exists("Workspace", ws_name):
+    frappe.delete_doc("Workspace", ws_name, ignore_permissions=True)
+
+ws = frappe.new_doc("Workspace")
+ws.label = ws_name
+ws.title = ws_name
+ws.icon = "custom-app"
+ws.module = module_name
+ws.public = 1
+ws.sequence_id = 1
+
+# Append roles
+target_roles = ["Passport Data Entry Clerk", "Passport Manager", "Passport Administrator", "System Manager"]
+for r in target_roles:
+    if frappe.db.exists("Role", r):
+        ws.append("roles", {"role": r})
+
+# In modern Frappe, type MUST be "Link"
+ws.append("links", {
+    "label": "Passport Applications",
+    "type": "Link",
+    "link_type": "DocType",
+    "link_to": "Passport Application"
+})
+
+ws.insert(ignore_permissions=True, ignore_links=True)
+frappe.db.commit()
+
+print(">>> [SUCCESS] Passport system workspace created and set as default!")
+exit()
+2026-09-29 16:53:52,426 INFO ipython === session end ===
+2026-09-29 17:09:33,895 INFO ipython === bench console session ===
+2026-09-29 17:09:33,895 INFO ipython import frappe
+import os
+
+# ============================================================
+# 1. Create the dedicated web page for the signature pad
+# ============================================================
+apps_path = frappe.get_app_path("passport_system")
+www_path = os.path.join(apps_path, "www")
+os.makedirs(www_path, exist_ok=True)
+
+sign_html_file = os.path.join(www_path, "passport_sign.html")
+
+html_content = """<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>توقيع صاحب الجواز / Applicant Signature</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 650px;
+            text-align: center;
+        }
+        h2 { margin-top: 0; color: #0f172a; font-size: 20px; }
+        p { color: #64748b; font-size: 14px; margin-bottom: 20px; }
+        .canvas-container {
+            border: 2px dashed #94a3b8;
+            border-radius: 8px;
+            background: #ffffff;
+            position: relative;
+            touch-action: none;
+        }
+        canvas {
+            width: 100%;
+            height: 240px;
+            display: block;
+            cursor: crosshair;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-save {
+            background: #16a34a;
+            color: #ffffff;
+        }
+        .btn-save:hover { background: #15803d; }
+        .btn-clear {
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .btn-clear:hover { background: #cbd5e1; }
+        .btn-cancel {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .btn-cancel:hover { background: #fecaca; }
+        #status-msg {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>لوحة التوقيع الرقمي (Digital Signature Pad)</h2>
+        <p>يرجى كتابة التوقيع داخل الإطار أدناه ثم الضغط على "حفظ وإغلاق"</p>
+
+        <div class="canvas-container">
+            <canvas id="signature-canvas" width="600" height="240"></canvas>
+        </div>
+
+        <div id="status-msg"></div>
+
+        <div class="btn-group">
+            <button class="btn-save" id="btn-save" onclick="saveSignature()">💾 حفظ التوقيع والعودة (Save & Return)</button>
+            <button class="btn-clear" onclick="clearCanvas()">مسح (Clear)</button>
+            <button class="btn-cancel" onclick="window.close()">إلغاء (Cancel)</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('signature-canvas');
+        const ctx = canvas.getContext('2d');
+        const statusMsg = document.getElementById('status-msg');
+        let isDrawing = false;
+        let hasDrawn = false;
+
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: (clientX - rect.left) * (canvas.width / rect.width),
+                y: (clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        function startDrawing(e) {
+            e.preventDefault();
+            isDrawing = true;
+            hasDrawn = true;
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing(e) {
+            if (isDrawing) {
+                isDrawing = false;
+                ctx.closePath();
+            }
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        window.addEventListener('mouseup', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasDrawn = false;
+            statusMsg.innerText = '';
+        }
+
+        function getDocName() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('docname');
+        }
+
+        async function saveSignature() {
+            if (!hasDrawn) {
+                alert('يرجى رسم التوقيع أولاً!');
+                return;
+            }
+
+            const docname = getDocName();
+            if (!docname) {
+                alert('خطأ: لم يتم تحديد مستند صالح.');
+                return;
+            }
+
+            const dataUrl = canvas.toDataURL('image/png');
+            const saveBtn = document.getElementById('btn-save');
+            saveBtn.disabled = true;
+            statusMsg.style.color = '#0284c7';
+            statusMsg.innerText = 'جاري رفع التوقيع وتحديث البيانات...';
+
+            try {
+                // Upload image via Frappe Upload File API
+                const response = await fetch('/api/method/upload_file', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-Frappe-CSRF-Token': getCookie('csrf_token')
+                    },
+                    body: JSON.stringify({
+                        doctype: 'Passport Application',
+                        docname: docname,
+                        filedata: dataUrl.split(',')[1],
+                        filename: `sig_${docname}.png`,
+                        from_form: 1,
+                        is_private: 0
+                    })
+                });
+
+                const res = await response.json();
+                if (res.message && res.message.file_url) {
+                    const fileUrl = res.message.file_url;
+
+                    // Update applicant_signature field on document
+                    await fetch('/api/method/frappe.client.set_value', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-Frappe-CSRF-Token': getCookie('csrf_token')
+                        },
+                        body: JSON.stringify({
+                            doctype: 'Passport Application',
+                            name: docname,
+                            fieldname: 'applicant_signature',
+                            value: fileUrl
+                        })
+                    });
+
+                    statusMsg.style.color = '#16a34a';
+                    statusMsg.innerText = '✅ تم حفظ التوقيع بنجاح! جاري العودة...';
+
+                    // Send message to parent tab to refresh
+                    if (window.opener && !window.opener.closed) {
+                        window.opener.postMessage({
+                            type: 'PASSPORT_SIGNATURE_SAVED',
+                            docname: docname,
+                            file_url: fileUrl
+                        }, '*');
+                    }
+
+                    setTimeout(() => {
+                        window.close();
+                    }, 600);
+                } else {
+                    throw new Error('فشل رفع الملف');
+                }
+            } catch (err) {
+                console.error(err);
+                statusMsg.style.color = '#dc2626';
+                statusMsg.innerText = 'حدث خطأ أثناء حفظ التوقيع، يرجى المحاولة ثانية.';
+                saveBtn.disabled = false;
+            }
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return '';
+        }
+    </script>
+</body>
+</html>
+"""
+
+with open(sign_html_file, "w") as f:
+    f.write(html_content)
+
+print(f">>> [OK] Signature page created at {sign_html_file}")
+
+# ============================================================
+# 2. Update Client Script to link to pad & receive message
+# ============================================================
+cs_code = """
+frappe.ui.form.on('Passport Application', {
+    refresh(frm) {
+        // Listen for signature pad completion from new tab
+        if (!window.has_passport_signature_listener) {
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'PASSPORT_SIGNATURE_SAVED') {
+                    if (cur_frm && cur_frm.doc.name === event.data.docname) {
+                        frappe.show_alert({
+                            message: __('تم استلام التوقيع وتحديث السجل!'),
+                            indicator: 'green'
+                        });
+                        cur_frm.reload_doc();
+                    }
+                }
+            });
+            window.has_passport_signature_listener = true;
+        }
+
+        // Add clickable link/button right beside or under the signature field
+        if (!frm.is_new()) {
+            frm.add_custom_button(__('✍️ فتح شاشة التوقيع في نافذة جديدة'), () => {
+                const sign_url = `/passport_sign?docname=${encodeURIComponent(frm.doc.name)}`;
+                window.open(sign_url, '_blank');
+            }, __('إجراءات التوقيع'));
+        }
+
+        // Handle button visibility
+        const state = frm.doc.workflow_state || 'Draft';
+        const roles = frappe.user_roles;
+        const is_clerk = roles.includes('Passport Data Entry Clerk') || roles.includes('System Manager');
+        const is_manager = roles.includes('Passport Manager') || roles.includes('System Manager');
+        const is_admin = roles.includes('Passport Administrator') || roles.includes('System Manager');
+
+        if (frm.fields_dict['btn_clerk_submit']) {
+            frm.toggle_display('btn_clerk_submit', state === 'Draft' && is_clerk);
+            frm.toggle_display('btn_manager_approve', state === 'Pending Manager Review' && is_manager);
+            frm.toggle_display('btn_manager_send_back', state === 'Pending Manager Review' && is_manager);
+            frm.toggle_display('btn_admin_issue', state === 'Pending Admin Authorization' && is_admin);
+            frm.toggle_display('btn_print_booklet', state === 'Issued / Ready to Print' || frm.doc.docstatus === 1);
+        }
+    },
+
+    btn_clerk_submit(frm) { apply_action(frm, 'Submit for Verification'); },
+    btn_manager_approve(frm) { apply_action(frm, 'Approve'); },
+    btn_manager_send_back(frm) { apply_action(frm, 'Send Back for Correction'); },
+    btn_admin_issue(frm) { apply_action(frm, 'Final Authorize & Issue'); },
+    btn_print_booklet(frm) {
+        const url = frappe.urllib.get_full_url(
+            `/printview?doctype=Passport%20Application&name=${encodeURIComponent(frm.doc.name)}&format=Passport%20TD3%20Booklet%20Page&no_letterhead=1`
+        );
+        window.open(url, '_blank');
+    }
+});
+
+function apply_action(frm, action_name) {
+    frappe.confirm(`هل أنت متأكد من تنفيذ الإجراء: "${action_name}"؟`, () => {
+        frappe.xcall('frappe.model.workflow.apply_workflow', {
+            doc: frm.doc,
+            action: action_name
+        }).then(() => frm.reload_doc());
+    });
+}
+"""
+
+script_name = "Passport Application Action Buttons"
+if frappe.db.exists("Client Script", script_name):
+    cs = frappe.get_doc("Client Script", script_name)
+else:
+    cs = frappe.new_doc("Client Script")
+    cs.name = script_name
+    cs.dt = "Passport Application"
+
+cs.script = cs_code
+cs.enabled = 1
+cs.save(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Interactive signature pad and parent-tab listener installed!")
+exit()
+2026-09-29 17:09:33,895 INFO ipython === session end ===
+2026-09-29 17:11:57,898 INFO ipython === bench console session ===
+2026-09-29 17:11:57,899 INFO ipython import frappe
+
+# 1. Update the applicant_signature field type in DocType
+dt = frappe.get_doc("DocType", "Passport Application")
+for f in dt.fields:
+    if f.fieldname == "applicant_signature":
+        f.fieldtype = "Attach Image"
+        f.hidden = 0
+dt.save(ignore_permissions=True)
+
+# 2. Update Client Script to embed the direct link inside the field area
+cs_code = """
+frappe.ui.form.on('Passport Application', {
+    refresh(frm) {
+        // Set up the listener for when the signature tab finishes
+        if (!window.has_passport_signature_listener) {
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'PASSPORT_SIGNATURE_SAVED') {
+                    if (cur_frm && cur_frm.doc.name === event.data.docname) {
+                        frappe.show_alert({
+                            message: __('تم استلام التوقيع بنجاح!'),
+                            indicator: 'green'
+                        });
+                        cur_frm.reload_doc();
+                    }
+                }
+            });
+            window.has_passport_signature_listener = true;
+        }
+
+        // Render the clickable text link under the signature label
+        render_signature_link(frm);
+
+        // Control bottom workflow buttons
+        const state = frm.doc.workflow_state || 'Draft';
+        const roles = frappe.user_roles;
+        const is_clerk = roles.includes('Passport Data Entry Clerk') || roles.includes('System Manager');
+        const is_manager = roles.includes('Passport Manager') || roles.includes('System Manager');
+        const is_admin = roles.includes('Passport Administrator') || roles.includes('System Manager');
+
+        if (frm.fields_dict['btn_clerk_submit']) {
+            frm.toggle_display('btn_clerk_submit', state === 'Draft' && is_clerk);
+            frm.toggle_display('btn_manager_approve', state === 'Pending Manager Review' && is_manager);
+            frm.toggle_display('btn_manager_send_back', state === 'Pending Manager Review' && is_manager);
+            frm.toggle_display('btn_admin_issue', state === 'Pending Admin Authorization' && is_admin);
+            frm.toggle_display('btn_print_booklet', state === 'Issued / Ready to Print' || frm.doc.docstatus === 1);
+        }
+    }
+});
+
+function render_signature_link(frm) {
+    const field = frm.fields_dict['applicant_signature'];
+    if (!field) return;
+
+    // Remove existing custom link box if reloaded
+    field.$wrapper.find('.custom-sign-link-box').remove();
+
+    let preview_html = '';
+    if (frm.doc.applicant_signature) {
+        preview_html = `
+            <div style="margin-top: 8px; border: 1px dashed #cbd5e1; padding: 6px; border-radius: 6px; background: #fff; width: fit-content;">
+                <img src="${frm.doc.applicant_signature}" style="max-height: 55px; max-width: 180px; display: block;" />
+            </div>
+        `;
+    }
+
+    const link_box = $(`
+        <div class="custom-sign-link-box" style="margin-top: 6px;">
+            <a href="javascript:void(0);" class="btn-open-sign-tab" style="
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                color: #2563eb;
+                font-weight: 600;
+                font-size: 13px;
+                text-decoration: underline;
+                cursor: pointer;
+            ">
+                <i class="fa fa-pencil-square-o"></i> اضغط هنا لفتح لوحة التوقيع في نافذة جديدة
+            </a>
+            ${preview_html}
+        </div>
+    `);
+
+    link_box.find('.btn-open-sign-tab').on('click', function() {
+        if (frm.is_new()) {
+            frappe.msgprint(__('يرجى حفظ المعاملة أولاً قبل فتح شاشة التوقيع'));
+            return;
+        }
+        const sign_url = `/passport_sign?docname=${encodeURIComponent(frm.doc.name)}`;
+        window.open(sign_url, '_blank');
+    });
+
+    field.$wrapper.append(link_box);
+}
+
+// Button actions
+function apply_action(frm, action_name) {
+    frappe.confirm(`هل أنت متأكد من تنفيذ الإجراء: "${action_name}"؟`, () => {
+        frappe.xcall('frappe.model.workflow.apply_workflow', {
+            doc: frm.doc,
+            action: action_name
+        }).then(() => frm.reload_doc());
+    });
+}
+"""
+
+script_name = "Passport Application Action Buttons"
+cs = frappe.get_doc("Client Script", script_name)
+cs.script = cs_code
+cs.save(ignore_permissions=True)
+
+frappe.db.commit()
+print(">>> [SUCCESS] Signature field converted to interactive text link!")
+exit()
+2026-09-29 17:11:57,899 INFO ipython === session end ===
+2026-09-29 17:16:35,544 INFO ipython === bench console session ===

@@ -1,0 +1,816 @@
+Backup failed for Site passport.local. Database or site_config.json may be corrupted
+Backup failed for Site passport.local. Database or site_config.json may be corrupted
+Traceback with variables (most recent call last):
+  File "apps/frappe/frappe/commands/site.py", line 881, in backup
+    odb = scheduled_backup(
+      context = CliCtxObj(force=False, profile=False, sites=['passport.local'], verbose=True)
+      with_files = False
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_backup_conf = False
+      verbose = True
+      compress = False
+      include = ''
+      exclude = ''
+      old_backup_metadata = False
+      scheduled_backup = <function scheduled_backup at 0x10c50ef00>
+      exit_code = 0
+      rollback_callback = None
+      site = 'passport.local'
+  File "apps/frappe/frappe/utils/backups.py", line 589, in scheduled_backup
+    return new_backup(
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+  File "apps/frappe/frappe/utils/backups.py", line 647, in new_backup
+    odb.get_backup(older_than, ignore_files, force=force)
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+      odb = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260928_180001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260928_180001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260928_180001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260928_180001', user='_e974fd96de439306', verbose=True)
+  File "apps/frappe/frappe/utils/backups.py", line 191, in get_backup
+    self.delete_if_step_fails(self.take_dump, self.backup_path_db)
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260928_180001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260928_180001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260928_180001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260928_180001', user='_e974fd96de439306', verbose=True)
+      older_than = 6
+      ignore_files = True
+      force = True
+      last_db = False
+      last_file = False
+      last_private_file = False
+      site_config_backup_path = False
+  File "apps/frappe/frappe/utils/backups.py", line 528, in delete_if_step_fails
+    raise e
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260928_180001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260928_180001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260928_180001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260928_180001', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x10c740d70>>
+      paths = ('./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260928_180001-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 523, in delete_if_step_fails
+    step()
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260928_180001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260928_180001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260928_180001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260928_180001', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x10c740d70>>
+      paths = ('./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260928_180001-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 465, in take_dump
+    frappe.throw(
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260928_180001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260928_180001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260928_180001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260928_180001', user='_e974fd96de439306', verbose=True)
+      frappe = <module 'frappe' from 'apps/frappe/frappe/__init__.py'>
+      shlex = <module 'shlex' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/shlex.py'>
+      get_app_branch = <function get_app_branch at 0x10c791900>
+      gzip_exc = '/usr/bin/gzip'
+      database_header_content = ['begin frappe metadata', '[frappe]', 'version = 16.35.0', 'branch = version-16', 'end frappe metadata', '']
+      generated_header = '-- begin frappe metadata
+      -- [frappe]
+      -- version = 16.35.0
+      -- branch = version-16
+      -- end frappe metadata
+      -- 
+      '
+      f = <_io.TextIOWrapper name='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz' encoding='UTF-8'>
+      cmd = []
+      extra = []
+      get_command = <function get_command at 0x10c08c1a0>
+      bin = None
+      args = ['--user=_e974fd96de439306', '--host=127.0.0.1', '--port=3306', '--password=ufgzn3Vtpp1z0sDI', '--single-transaction', '--quick', '--lock-tables=false', '_e974fd96de439306']
+      bin_name = 'mariadb-dump'
+  File "apps/frappe/frappe/utils/messages.py", line 159, in throw
+    msgprint(
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      exc = frappe.exceptions.ExecutableNotFound
+      title = None
+      is_minimizable = False
+      wide = False
+      as_list = False
+      primary_action = None
+      allow_dangerous_html = False
+  File "apps/frappe/frappe/utils/messages.py", line 118, in msgprint
+    _raise_exception()
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      title = None
+      raise_exception = frappe.exceptions.ExecutableNotFound
+      as_table = False
+      as_list = False
+      indicator = 'red'
+      alert = False
+      primary_action = None
+      is_minimizable = False
+      wide = False
+      realtime = False
+      allow_dangerous_html = False
+      clean_html = <function clean_html at 0x10ad4f110>
+      _raise_exception = <function msgprint.<locals>._raise_exception at 0x10c756ae0>
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': 'f42df3d1926fb402ea99daad3e0bdf4745056d84b7f0fcc7200879c2'}
+  File "apps/frappe/frappe/utils/messages.py", line 59, in _raise_exception
+    raise exc
+      exc = mariadb-dump not found in PATH! This is required to take a backup.
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': 'f42df3d1926fb402ea99daad3e0bdf4745056d84b7f0fcc7200879c2'}
+      raise_exception = frappe.exceptions.ExecutableNotFound
+frappe.exceptions.ExecutableNotFound: mariadb-dump not found in PATH! This is required to take a backup.
+Traceback with variables (most recent call last):
+  File "apps/frappe/frappe/commands/site.py", line 881, in backup
+    odb = scheduled_backup(
+      context = CliCtxObj(force=False, profile=False, sites=['passport.local'], verbose=True)
+      with_files = False
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_backup_conf = False
+      verbose = True
+      compress = False
+      include = ''
+      exclude = ''
+      old_backup_metadata = False
+      scheduled_backup = <function scheduled_backup at 0x108ad2f00>
+      exit_code = 0
+      rollback_callback = None
+      site = 'passport.local'
+  File "apps/frappe/frappe/utils/backups.py", line 589, in scheduled_backup
+    return new_backup(
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+  File "apps/frappe/frappe/utils/backups.py", line 647, in new_backup
+    odb.get_backup(older_than, ignore_files, force=force)
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+      odb = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260928_180001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260928_180001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260928_180001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260928_180001', user='_e974fd96de439306', verbose=True)
+  File "apps/frappe/frappe/utils/backups.py", line 191, in get_backup
+    self.delete_if_step_fails(self.take_dump, self.backup_path_db)
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260928_180001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260928_180001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260928_180001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260928_180001', user='_e974fd96de439306', verbose=True)
+      older_than = 6
+      ignore_files = True
+      force = True
+      last_db = False
+      last_file = False
+      last_private_file = False
+      site_config_backup_path = False
+  File "apps/frappe/frappe/utils/backups.py", line 528, in delete_if_step_fails
+    raise e
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260928_180001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260928_180001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260928_180001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260928_180001', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x108d00d70>>
+      paths = ('./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260928_180001-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 523, in delete_if_step_fails
+    step()
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260928_180001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260928_180001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260928_180001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260928_180001', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x108d00d70>>
+      paths = ('./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260928_180001-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 465, in take_dump
+    frappe.throw(
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260928_180001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260928_180001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260928_180001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260928_180001', user='_e974fd96de439306', verbose=True)
+      frappe = <module 'frappe' from 'apps/frappe/frappe/__init__.py'>
+      shlex = <module 'shlex' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/shlex.py'>
+      get_app_branch = <function get_app_branch at 0x108d55900>
+      gzip_exc = '/usr/bin/gzip'
+      database_header_content = ['begin frappe metadata', '[frappe]', 'version = 16.35.0', 'branch = version-16', 'end frappe metadata', '']
+      generated_header = '-- begin frappe metadata
+      -- [frappe]
+      -- version = 16.35.0
+      -- branch = version-16
+      -- end frappe metadata
+      -- 
+      '
+      f = <_io.TextIOWrapper name='./passport.local/private/backups/20260928_180001-passport_local-database.sql.gz' encoding='UTF-8'>
+      cmd = []
+      extra = []
+      get_command = <function get_command at 0x1086501a0>
+      bin = None
+      args = ['--user=_e974fd96de439306', '--host=127.0.0.1', '--port=3306', '--password=ufgzn3Vtpp1z0sDI', '--single-transaction', '--quick', '--lock-tables=false', '_e974fd96de439306']
+      bin_name = 'mariadb-dump'
+  File "apps/frappe/frappe/utils/messages.py", line 159, in throw
+    msgprint(
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      exc = frappe.exceptions.ExecutableNotFound
+      title = None
+      is_minimizable = False
+      wide = False
+      as_list = False
+      primary_action = None
+      allow_dangerous_html = False
+  File "apps/frappe/frappe/utils/messages.py", line 118, in msgprint
+    _raise_exception()
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      title = None
+      raise_exception = frappe.exceptions.ExecutableNotFound
+      as_table = False
+      as_list = False
+      indicator = 'red'
+      alert = False
+      primary_action = None
+      is_minimizable = False
+      wide = False
+      realtime = False
+      allow_dangerous_html = False
+      clean_html = <function clean_html at 0x107313110>
+      _raise_exception = <function msgprint.<locals>._raise_exception at 0x108d1aae0>
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': 'e9527db98fc1c6ce8723d8663dbe1753c7c566c476580c543e0153a6'}
+  File "apps/frappe/frappe/utils/messages.py", line 59, in _raise_exception
+    raise exc
+      exc = mariadb-dump not found in PATH! This is required to take a backup.
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': 'e9527db98fc1c6ce8723d8663dbe1753c7c566c476580c543e0153a6'}
+      raise_exception = frappe.exceptions.ExecutableNotFound
+frappe.exceptions.ExecutableNotFound: mariadb-dump not found in PATH! This is required to take a backup.
+Backup failed for Site passport.local. Database or site_config.json may be corrupted
+Backup failed for Site passport.local. Database or site_config.json may be corrupted
+Traceback with variables (most recent call last):
+  File "apps/frappe/frappe/commands/site.py", line 881, in backup
+    odb = scheduled_backup(
+      context = CliCtxObj(force=False, profile=False, sites=['passport.local'], verbose=True)
+      with_files = False
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_backup_conf = False
+      verbose = True
+      compress = False
+      include = ''
+      exclude = ''
+      old_backup_metadata = False
+      scheduled_backup = <function scheduled_backup at 0x10bffa770>
+      exit_code = 0
+      rollback_callback = None
+      site = 'passport.local'
+  File "apps/frappe/frappe/utils/backups.py", line 589, in scheduled_backup
+    return new_backup(
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+  File "apps/frappe/frappe/utils/backups.py", line 647, in new_backup
+    odb.get_backup(older_than, ignore_files, force=force)
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+      odb = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_000002-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_000002-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_000002-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_000002', user='_e974fd96de439306', verbose=True)
+  File "apps/frappe/frappe/utils/backups.py", line 191, in get_backup
+    self.delete_if_step_fails(self.take_dump, self.backup_path_db)
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_000002-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_000002-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_000002-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_000002', user='_e974fd96de439306', verbose=True)
+      older_than = 6
+      ignore_files = True
+      force = True
+      last_db = False
+      last_file = False
+      last_private_file = False
+      site_config_backup_path = False
+  File "apps/frappe/frappe/utils/backups.py", line 528, in delete_if_step_fails
+    raise e
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_000002-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_000002-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_000002-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_000002', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x10c1c0d70>>
+      paths = ('./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260929_000002-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 523, in delete_if_step_fails
+    step()
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_000002-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_000002-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_000002-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_000002', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x10c1c0d70>>
+      paths = ('./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260929_000002-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 465, in take_dump
+    frappe.throw(
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_000002-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_000002-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_000002-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_000002', user='_e974fd96de439306', verbose=True)
+      frappe = <module 'frappe' from 'apps/frappe/frappe/__init__.py'>
+      shlex = <module 'shlex' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/shlex.py'>
+      get_app_branch = <function get_app_branch at 0x10c2117a0>
+      gzip_exc = '/usr/bin/gzip'
+      database_header_content = ['begin frappe metadata', '[frappe]', 'version = 16.35.0', 'branch = version-16', 'end frappe metadata', '']
+      generated_header = '-- begin frappe metadata
+      -- [frappe]
+      -- version = 16.35.0
+      -- branch = version-16
+      -- end frappe metadata
+      -- 
+      '
+      f = <_io.TextIOWrapper name='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz' encoding='UTF-8'>
+      cmd = []
+      extra = []
+      get_command = <function get_command at 0x10bb141a0>
+      bin = None
+      args = ['--user=_e974fd96de439306', '--host=127.0.0.1', '--port=3306', '--password=ufgzn3Vtpp1z0sDI', '--single-transaction', '--quick', '--lock-tables=false', '_e974fd96de439306']
+      bin_name = 'mariadb-dump'
+  File "apps/frappe/frappe/utils/messages.py", line 159, in throw
+    msgprint(
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      exc = frappe.exceptions.ExecutableNotFound
+      title = None
+      is_minimizable = False
+      wide = False
+      as_list = False
+      primary_action = None
+      allow_dangerous_html = False
+  File "apps/frappe/frappe/utils/messages.py", line 118, in msgprint
+    _raise_exception()
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      title = None
+      raise_exception = frappe.exceptions.ExecutableNotFound
+      as_table = False
+      as_list = False
+      indicator = 'red'
+      alert = False
+      primary_action = None
+      is_minimizable = False
+      wide = False
+      realtime = False
+      allow_dangerous_html = False
+      clean_html = <function clean_html at 0x10a7d7110>
+      _raise_exception = <function msgprint.<locals>._raise_exception at 0x10c1de980>
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': '67026f7a12abfb1180b6626391b68ddf86c7630a3085ff877f696925'}
+  File "apps/frappe/frappe/utils/messages.py", line 59, in _raise_exception
+    raise exc
+      exc = mariadb-dump not found in PATH! This is required to take a backup.
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': '67026f7a12abfb1180b6626391b68ddf86c7630a3085ff877f696925'}
+      raise_exception = frappe.exceptions.ExecutableNotFound
+frappe.exceptions.ExecutableNotFound: mariadb-dump not found in PATH! This is required to take a backup.
+Traceback with variables (most recent call last):
+  File "apps/frappe/frappe/commands/site.py", line 881, in backup
+    odb = scheduled_backup(
+      context = CliCtxObj(force=False, profile=False, sites=['passport.local'], verbose=True)
+      with_files = False
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_backup_conf = False
+      verbose = True
+      compress = False
+      include = ''
+      exclude = ''
+      old_backup_metadata = False
+      scheduled_backup = <function scheduled_backup at 0x10c046770>
+      exit_code = 0
+      rollback_callback = None
+      site = 'passport.local'
+  File "apps/frappe/frappe/utils/backups.py", line 589, in scheduled_backup
+    return new_backup(
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+  File "apps/frappe/frappe/utils/backups.py", line 647, in new_backup
+    odb.get_backup(older_than, ignore_files, force=force)
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+      odb = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_000002-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_000002-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_000002-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_000002', user='_e974fd96de439306', verbose=True)
+  File "apps/frappe/frappe/utils/backups.py", line 191, in get_backup
+    self.delete_if_step_fails(self.take_dump, self.backup_path_db)
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_000002-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_000002-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_000002-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_000002', user='_e974fd96de439306', verbose=True)
+      older_than = 6
+      ignore_files = True
+      force = True
+      last_db = False
+      last_file = False
+      last_private_file = False
+      site_config_backup_path = False
+  File "apps/frappe/frappe/utils/backups.py", line 528, in delete_if_step_fails
+    raise e
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_000002-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_000002-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_000002-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_000002', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x10c20cd70>>
+      paths = ('./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260929_000002-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 523, in delete_if_step_fails
+    step()
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_000002-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_000002-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_000002-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_000002', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x10c20cd70>>
+      paths = ('./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260929_000002-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 465, in take_dump
+    frappe.throw(
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_000002-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_000002-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_000002-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_000002', user='_e974fd96de439306', verbose=True)
+      frappe = <module 'frappe' from 'apps/frappe/frappe/__init__.py'>
+      shlex = <module 'shlex' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/shlex.py'>
+      get_app_branch = <function get_app_branch at 0x10c25d7a0>
+      gzip_exc = '/usr/bin/gzip'
+      database_header_content = ['begin frappe metadata', '[frappe]', 'version = 16.35.0', 'branch = version-16', 'end frappe metadata', '']
+      generated_header = '-- begin frappe metadata
+      -- [frappe]
+      -- version = 16.35.0
+      -- branch = version-16
+      -- end frappe metadata
+      -- 
+      '
+      f = <_io.TextIOWrapper name='./passport.local/private/backups/20260929_000002-passport_local-database.sql.gz' encoding='UTF-8'>
+      cmd = []
+      extra = []
+      get_command = <function get_command at 0x10bb601a0>
+      bin = None
+      args = ['--user=_e974fd96de439306', '--host=127.0.0.1', '--port=3306', '--password=ufgzn3Vtpp1z0sDI', '--single-transaction', '--quick', '--lock-tables=false', '_e974fd96de439306']
+      bin_name = 'mariadb-dump'
+  File "apps/frappe/frappe/utils/messages.py", line 159, in throw
+    msgprint(
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      exc = frappe.exceptions.ExecutableNotFound
+      title = None
+      is_minimizable = False
+      wide = False
+      as_list = False
+      primary_action = None
+      allow_dangerous_html = False
+  File "apps/frappe/frappe/utils/messages.py", line 118, in msgprint
+    _raise_exception()
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      title = None
+      raise_exception = frappe.exceptions.ExecutableNotFound
+      as_table = False
+      as_list = False
+      indicator = 'red'
+      alert = False
+      primary_action = None
+      is_minimizable = False
+      wide = False
+      realtime = False
+      allow_dangerous_html = False
+      clean_html = <function clean_html at 0x10a84b110>
+      _raise_exception = <function msgprint.<locals>._raise_exception at 0x10c22a980>
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': '1b34ab71497086be4485b984388c96728ea033aa627e67ca93535f09'}
+  File "apps/frappe/frappe/utils/messages.py", line 59, in _raise_exception
+    raise exc
+      exc = mariadb-dump not found in PATH! This is required to take a backup.
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': '1b34ab71497086be4485b984388c96728ea033aa627e67ca93535f09'}
+      raise_exception = frappe.exceptions.ExecutableNotFound
+frappe.exceptions.ExecutableNotFound: mariadb-dump not found in PATH! This is required to take a backup.
+Backup failed for Site passport.local. Database or site_config.json may be corrupted
+Backup failed for Site passport.local. Database or site_config.json may be corrupted
+Traceback with variables (most recent call last):
+  File "apps/frappe/frappe/commands/site.py", line 881, in backup
+    odb = scheduled_backup(
+      context = CliCtxObj(force=False, profile=False, sites=['passport.local'], verbose=True)
+      with_files = False
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_backup_conf = False
+      verbose = True
+      compress = False
+      include = ''
+      exclude = ''
+      old_backup_metadata = False
+      scheduled_backup = <function scheduled_backup at 0x10c76e770>
+      exit_code = 0
+      rollback_callback = None
+      site = 'passport.local'
+  File "apps/frappe/frappe/utils/backups.py", line 589, in scheduled_backup
+    return new_backup(
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+  File "apps/frappe/frappe/utils/backups.py", line 647, in new_backup
+    odb.get_backup(older_than, ignore_files, force=force)
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+      odb = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_120001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_120001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_120001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_120001', user='_e974fd96de439306', verbose=True)
+  File "apps/frappe/frappe/utils/backups.py", line 191, in get_backup
+    self.delete_if_step_fails(self.take_dump, self.backup_path_db)
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_120001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_120001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_120001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_120001', user='_e974fd96de439306', verbose=True)
+      older_than = 6
+      ignore_files = True
+      force = True
+      last_db = False
+      last_file = False
+      last_private_file = False
+      site_config_backup_path = False
+  File "apps/frappe/frappe/utils/backups.py", line 528, in delete_if_step_fails
+    raise e
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_120001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_120001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_120001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_120001', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x10c934d70>>
+      paths = ('./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260929_120001-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 523, in delete_if_step_fails
+    step()
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_120001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_120001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_120001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_120001', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x10c934d70>>
+      paths = ('./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260929_120001-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 465, in take_dump
+    frappe.throw(
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_120001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_120001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_120001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_120001', user='_e974fd96de439306', verbose=True)
+      frappe = <module 'frappe' from 'apps/frappe/frappe/__init__.py'>
+      shlex = <module 'shlex' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/shlex.py'>
+      get_app_branch = <function get_app_branch at 0x10c9857a0>
+      gzip_exc = '/usr/bin/gzip'
+      database_header_content = ['begin frappe metadata', '[frappe]', 'version = 16.35.0', 'branch = version-16', 'end frappe metadata', '']
+      generated_header = '-- begin frappe metadata
+      -- [frappe]
+      -- version = 16.35.0
+      -- branch = version-16
+      -- end frappe metadata
+      -- 
+      '
+      f = <_io.TextIOWrapper name='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz' encoding='UTF-8'>
+      cmd = []
+      extra = []
+      get_command = <function get_command at 0x10c2881a0>
+      bin = None
+      args = ['--user=_e974fd96de439306', '--host=127.0.0.1', '--port=3306', '--password=ufgzn3Vtpp1z0sDI', '--single-transaction', '--quick', '--lock-tables=false', '_e974fd96de439306']
+      bin_name = 'mariadb-dump'
+  File "apps/frappe/frappe/utils/messages.py", line 159, in throw
+    msgprint(
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      exc = frappe.exceptions.ExecutableNotFound
+      title = None
+      is_minimizable = False
+      wide = False
+      as_list = False
+      primary_action = None
+      allow_dangerous_html = False
+  File "apps/frappe/frappe/utils/messages.py", line 118, in msgprint
+    _raise_exception()
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      title = None
+      raise_exception = frappe.exceptions.ExecutableNotFound
+      as_table = False
+      as_list = False
+      indicator = 'red'
+      alert = False
+      primary_action = None
+      is_minimizable = False
+      wide = False
+      realtime = False
+      allow_dangerous_html = False
+      clean_html = <function clean_html at 0x10af73110>
+      _raise_exception = <function msgprint.<locals>._raise_exception at 0x10c952980>
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': 'db8fe08905dfe217f8d973c20e56bd102e6a3a1cfdd6627eead6aadc'}
+  File "apps/frappe/frappe/utils/messages.py", line 59, in _raise_exception
+    raise exc
+      exc = mariadb-dump not found in PATH! This is required to take a backup.
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': 'db8fe08905dfe217f8d973c20e56bd102e6a3a1cfdd6627eead6aadc'}
+      raise_exception = frappe.exceptions.ExecutableNotFound
+frappe.exceptions.ExecutableNotFound: mariadb-dump not found in PATH! This is required to take a backup.
+Traceback with variables (most recent call last):
+  File "apps/frappe/frappe/commands/site.py", line 881, in backup
+    odb = scheduled_backup(
+      context = CliCtxObj(force=False, profile=False, sites=['passport.local'], verbose=True)
+      with_files = False
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_backup_conf = False
+      verbose = True
+      compress = False
+      include = ''
+      exclude = ''
+      old_backup_metadata = False
+      scheduled_backup = <function scheduled_backup at 0x10869a770>
+      exit_code = 0
+      rollback_callback = None
+      site = 'passport.local'
+  File "apps/frappe/frappe/utils/backups.py", line 589, in scheduled_backup
+    return new_backup(
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+  File "apps/frappe/frappe/utils/backups.py", line 647, in new_backup
+    odb.get_backup(older_than, ignore_files, force=force)
+      older_than = 6
+      ignore_files = True
+      backup_path = None
+      backup_path_db = None
+      backup_path_files = None
+      backup_path_private_files = None
+      backup_path_conf = None
+      ignore_conf = False
+      include_doctypes = ''
+      exclude_doctypes = ''
+      compress = False
+      force = True
+      verbose = True
+      old_backup_metadata = False
+      rollback_callback = frappe.utils.CallbackManager()
+      odb = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_120001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_120001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_120001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_120001', user='_e974fd96de439306', verbose=True)
+  File "apps/frappe/frappe/utils/backups.py", line 191, in get_backup
+    self.delete_if_step_fails(self.take_dump, self.backup_path_db)
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_120001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_120001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_120001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_120001', user='_e974fd96de439306', verbose=True)
+      older_than = 6
+      ignore_files = True
+      force = True
+      last_db = False
+      last_file = False
+      last_private_file = False
+      site_config_backup_path = False
+  File "apps/frappe/frappe/utils/backups.py", line 528, in delete_if_step_fails
+    raise e
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_120001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_120001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_120001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_120001', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x108860d70>>
+      paths = ('./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260929_120001-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 523, in delete_if_step_fails
+    step()
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_120001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_120001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_120001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_120001', user='_e974fd96de439306', verbose=True)
+      step = <bound method BackupGenerator.take_dump of <frappe.utils.backups.BackupGenerator object at 0x108860d70>>
+      paths = ('./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz')
+      path = './passport.local/private/backups/20260929_120001-passport_local-database.sql.gz'
+  File "apps/frappe/frappe/utils/backups.py", line 465, in take_dump
+    frappe.throw(
+      self = frappe.utils.backups.BackupGenerator(backup_excludes=[], backup_includes=[], backup_path=None, backup_path_conf='./passport.local/private/backups/20260929_120001-passport_local-site_config_backup.json', backup_path_db='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz', backup_path_files='./passport.local/private/backups/20260929_120001-passport_local-files.tar', backup_path_private_files='./passport.local/private/backups/20260929_120001-passport_local-private-files.tar', compress_files=False, db_host='127.0.0.1', db_name='_e974fd96de439306', db_port=3306, db_socket=None, db_type='mariadb', exclude_doctypes='', ignore_conf=False, include_doctypes='', old_backup_metadata=False, partial=[], password='ufgzn3Vtpp1z0sDI', rollback_callback=frappe.utils.CallbackManager(-), site_slug='passport_local', todays_date='20260929_120001', user='_e974fd96de439306', verbose=True)
+      frappe = <module 'frappe' from 'apps/frappe/frappe/__init__.py'>
+      shlex = <module 'shlex' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/shlex.py'>
+      get_app_branch = <function get_app_branch at 0x1088b17a0>
+      gzip_exc = '/usr/bin/gzip'
+      database_header_content = ['begin frappe metadata', '[frappe]', 'version = 16.35.0', 'branch = version-16', 'end frappe metadata', '']
+      generated_header = '-- begin frappe metadata
+      -- [frappe]
+      -- version = 16.35.0
+      -- branch = version-16
+      -- end frappe metadata
+      -- 
+      '
+      f = <_io.TextIOWrapper name='./passport.local/private/backups/20260929_120001-passport_local-database.sql.gz' encoding='UTF-8'>
+      cmd = []
+      extra = []
+      get_command = <function get_command at 0x1081b41a0>
+      bin = None
+      args = ['--user=_e974fd96de439306', '--host=127.0.0.1', '--port=3306', '--password=ufgzn3Vtpp1z0sDI', '--single-transaction', '--quick', '--lock-tables=false', '_e974fd96de439306']
+      bin_name = 'mariadb-dump'
+  File "apps/frappe/frappe/utils/messages.py", line 159, in throw
+    msgprint(
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      exc = frappe.exceptions.ExecutableNotFound
+      title = None
+      is_minimizable = False
+      wide = False
+      as_list = False
+      primary_action = None
+      allow_dangerous_html = False
+  File "apps/frappe/frappe/utils/messages.py", line 118, in msgprint
+    _raise_exception()
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      title = None
+      raise_exception = frappe.exceptions.ExecutableNotFound
+      as_table = False
+      as_list = False
+      indicator = 'red'
+      alert = False
+      primary_action = None
+      is_minimizable = False
+      wide = False
+      realtime = False
+      allow_dangerous_html = False
+      clean_html = <function clean_html at 0x106e77110>
+      _raise_exception = <function msgprint.<locals>._raise_exception at 0x10887e980>
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': 'b844fe80b3958849ffcc65e039e7ee48dbabc7ddee8b86eb185c565d'}
+  File "apps/frappe/frappe/utils/messages.py", line 59, in _raise_exception
+    raise exc
+      exc = mariadb-dump not found in PATH! This is required to take a backup.
+      inspect = <module 'inspect' from '/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/inspect.py'>
+      msg = 'mariadb-dump not found in PATH! This is required to take a backup.'
+      out = {'message': 'mariadb-dump not found in PATH! This is required to take a backup.', 'as_table': False, 'title': 'Message', 'indicator': 'red', 'raise_exception': 1, '__frappe_exc_id': 'b844fe80b3958849ffcc65e039e7ee48dbabc7ddee8b86eb185c565d'}
+      raise_exception = frappe.exceptions.ExecutableNotFound
+frappe.exceptions.ExecutableNotFound: mariadb-dump not found in PATH! This is required to take a backup.

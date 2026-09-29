@@ -1,0 +1,13 @@
+{
+ "db_name": "_e974fd96de439306",
+ "db_password": "ufgzn3Vtpp1z0sDI",
+ "db_type": "mariadb",
+ "db_user": "_e974fd96de439306",
+ "developer_mode": 1,
+ "encryption_key": "mI2WU_cOfF-hc5cKm08KX9I9tpUhVi21evDo1d-ZzmI=",
+ "installed_apps": [
+  "frappe",
+  "passport_system",
+  "erpnext"
+ ]
+}

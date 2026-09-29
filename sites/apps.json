@@ -1,0 +1,31 @@
+{
+    "frappe": {
+        "resolution": {
+            "commit_hash": null,
+            "branch": null
+        },
+        "required": [],
+        "idx": 1,
+        "version": "16.35.0"
+    },
+    "passport_system": {
+        "is_repo": true,
+        "resolution": {
+            "commit_hash": "2728bb600aea6db48d5dbaae196e94c205b191e7",
+            "branch": "c"
+        },
+        "required": [],
+        "idx": 2,
+        "version": "0.0.1"
+    },
+    "erpnext": {
+        "is_repo": true,
+        "resolution": {
+            "commit_hash": "b4d6595f942862234c67e9f1cba952502c439ab1",
+            "branch": "develop"
+        },
+        "required": [],
+        "idx": 3,
+        "version": "17.0.0-dev"
+    }
+}
